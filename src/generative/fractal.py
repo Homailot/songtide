@@ -1,6 +1,7 @@
 import math
 import numpy as np
 
+
 def number_to_base(num: int, base: int) -> list[int]:
     """Converts a number to a list of digits in a given base.
 
@@ -27,6 +28,7 @@ def number_to_base(num: int, base: int) -> list[int]:
 
     return digits[::-1]
 
+
 def sum_digits_base(num: int, base: int) -> int:
     """Sums the digits of a number in a given base.
 
@@ -45,6 +47,7 @@ def sum_digits_base(num: int, base: int) -> int:
     """
     digits = number_to_base(num, base)
     return sum(digits)
+
 
 def morse_thue_value(counter: int, base: int, multiplier: int) -> int:
     """Generates the Morse-Thue value for a given counter.
