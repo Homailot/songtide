@@ -9,3 +9,7 @@
 
 [Euclidean Rhythm](https://github.com/brianhouse/bjorklund)
 [Fractmus](https://fractmus.com/Math.php)
+
+## PyFluidSynth
+
+[PyFluidSynth](https://github.com/nwhitehead/pyfluidsynth)

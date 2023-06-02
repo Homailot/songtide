@@ -2,6 +2,7 @@ import sys
 from enum import Enum
 from multiprocessing import Process, Event, Manager
 from soundengine import soundengine
+from src.config import Configs
 
 import fluidsynth
 import pygame
@@ -38,12 +39,12 @@ class Game:
             self.lag -= self.milliseconds_per_frame
 
         self.render(screen)
-        self.delta_time = self.clock.tick(60)
-        self.lag += self.delta_time
 
     def start(self):
+        configs = Configs()
+
         pygame.init()
-        screen = pygame.display.set_mode((1280, 700))
+        screen = pygame.display.set_mode((configs.screen_width, configs.screen_height))
         pygame.display.set_caption("Songtide")
 
         self.clock = pygame.time.Clock()
@@ -66,6 +67,9 @@ class Game:
                         running = False
                     case _:
                         pass
+
+                self.delta_time = self.clock.tick(60)
+                self.lag += self.delta_time
 
             stop_event.set()
             soundengine_process.join()
