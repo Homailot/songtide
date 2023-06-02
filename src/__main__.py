@@ -55,7 +55,7 @@ class Game:
 
         with Manager() as manager:
             stop_event = manager.Event()
-            soundengine_process = Process(target=soundengine.start, args=(stop_event,))
+            soundengine_process = Process(target=soundengine.start, args=(stop_event, 80))
             soundengine_process.start()
 
             running = True
