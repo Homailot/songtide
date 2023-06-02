@@ -1,6 +1,10 @@
-import pygame
+import sys
 from enum import Enum
+from multiprocessing import Process, Event, Manager
+from soundengine import soundengine
 
+import fluidsynth
+import pygame
 
 class GameState(Enum):
     RUNNING = 0
@@ -13,7 +17,6 @@ class Game:
         self.state = GameState.STOPPED
         self.frames_per_second = 60
         self.milliseconds_per_frame = 1000 / self.frames_per_second
-        pass
 
     def process_events(self):
         for event in pygame.event.get():
@@ -23,7 +26,6 @@ class Game:
     def render(self, screen: pygame.Surface):
         screen.fill("purple")
         pygame.display.flip()
-        pass
 
     def update(self):
         pass
@@ -38,7 +40,6 @@ class Game:
         self.render(screen)
         self.delta_time = self.clock.tick(60)
         self.lag += self.delta_time
-        pass
 
     def start(self):
         pygame.init()
@@ -51,19 +52,31 @@ class Game:
 
         self.state = GameState.RUNNING
 
-        running = True
-        while running:
-            match self.state:
-                case GameState.RUNNING:
-                    self.handle_run(screen)
-                case GameState.STOPPED:
-                    running = False
-                case _:
-                    pass
+        with Manager() as manager:
+            stop_event = manager.Event()
+            soundengine_process = Process(target=soundengine.start, args=(stop_event,))
+            soundengine_process.start()
 
-        pygame.quit()
+            running = True
+            while running:
+                match self.state:
+                    case GameState.RUNNING:
+                        self.handle_run(screen)
+                    case GameState.STOPPED:
+                        running = False
+                    case _:
+                        pass
+
+            stop_event.set()
+            soundengine_process.join()
+
+            pygame.quit()
+            sys.exit()
 
 
 if __name__ == "__main__":
+    fs = fluidsynth.Synth()
+    fs.delete()
+
     game = Game()
     game.start()
