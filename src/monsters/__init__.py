@@ -13,7 +13,7 @@ class PluginParameter:
     def __init__(
         self,
         name: str,
-        value: float,
+        value: Callable[[], float],
         min: float,
         max: float,
         save: Callable[[float], None],

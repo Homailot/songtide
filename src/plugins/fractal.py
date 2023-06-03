@@ -21,6 +21,18 @@ class FractalNotePlugin(MonsterPlugin):
         self.multiplier = multiplier
         self.counter = 0
 
+    def set_base(self, base: int):
+        self.base = base
+
+    def set_multiplier(self, multiplier: int):
+        self.multiplier = multiplier
+
+    def get_base(self) -> int:
+        return self.base
+
+    def get_multiplier(self) -> int:
+        return self.multiplier
+
     def transform(
         self, _: int, duration: float, rest: float
     ) -> tuple[int, float, float]:
@@ -76,11 +88,29 @@ class FractalDurationPlugin(MonsterPlugin):
         self.max_duration = max_duration
         self.counter = 0
 
+    def set_base(self, base: int):
+        self.base = base
+
+    def set_multiplier(self, multiplier: int):
+        self.multiplier = multiplier
+
     def set_starting_duration(self, starting_duration: float):
         self.starting_duration = starting_duration
 
     def set_max_duration(self, max_duration: float):
         self.max_duration = max_duration
+
+    def get_base(self) -> int:
+        return self.base
+
+    def get_multiplier(self) -> int:
+        return self.multiplier
+
+    def get_starting_duration(self) -> float:
+        return self.starting_duration
+
+    def get_max_duration(self) -> float:
+        return self.max_duration
 
     def transform(self, note: int, _: float, rest: float) -> tuple[int, float, float]:
         """Transforms the note, duration, and rest of a sound that a monster makes.

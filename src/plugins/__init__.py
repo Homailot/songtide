@@ -37,6 +37,12 @@ class ConstantRestPlugin(MonsterPlugin):
     def __init__(self, rest: float):
         self.rest = rest
 
+    def set_rest(self, rest: float):
+        self.rest = rest
+
+    def get_rest(self) -> float:
+        return self.rest
+
     def transform(
         self, note: int, duration: float, _: float
     ) -> tuple[int, float, float]:

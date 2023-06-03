@@ -25,6 +25,12 @@ class OctavePlugin(MonsterPlugin):
 
         self.interval_num = intervals
 
+    def get_num_octaves(self) -> int:
+        return self.num_octaves
+
+    def get_intervals(self) -> int:
+        return self.interval_num
+
     def transform(
         self, note: int, duration: float, rest: float
     ) -> tuple[int, float, float]:

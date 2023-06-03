@@ -44,7 +44,7 @@ class EtherealEcho(Monster):
         self.plugin_parameters = [
             PluginParameter(
                 "Jiveness",
-                self.fractal_duration_plugin.starting_duration,
+                self.fractal_duration_plugin.get_starting_duration,
                 0.5,
                 3,
                 lambda value: self.fractal_duration_plugin.set_starting_duration(value),
@@ -52,7 +52,7 @@ class EtherealEcho(Monster):
             ),
             PluginParameter(
                 "Quirkiness",
-                self.fractal_duration_plugin.max_duration,
+                self.fractal_duration_plugin.get_max_duration,
                 2,
                 5,
                 lambda value: self.fractal_duration_plugin.set_max_duration(value),
@@ -60,15 +60,15 @@ class EtherealEcho(Monster):
             ),
             PluginParameter(
                 "Sleepiness",
-                self.constant_rest_plugin.rest,
+                self.constant_rest_plugin.get_rest,
                 0,
-                1,
+                2,
                 lambda value: self.constant_rest_plugin.set_rest(value),
                 0.25,
             ),
             PluginParameter(
                 "Emotion",
-                self.octave_plugin.interval_num,
+                self.octave_plugin.get_intervals,
                 0,
                 1,
                 lambda value: self.octave_plugin.set_intervals(value),
@@ -76,7 +76,7 @@ class EtherealEcho(Monster):
             ),
             PluginParameter(
                 "Range",
-                self.octave_plugin.num_octaves,
+                self.octave_plugin.get_num_octaves,
                 1,
                 3,
                 lambda value: self.octave_plugin.set_num_octaves(value),
