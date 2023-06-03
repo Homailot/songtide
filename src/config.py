@@ -23,6 +23,7 @@ class Configs(metaclass=SingletonMeta):
     screen_height: int = None
     midi_driver: str = None
     audio_driver: str = None
+    sample_rate: float = 48000.0
 
     def __init__(self) -> None:
         load_dotenv()
@@ -32,3 +33,4 @@ class Configs(metaclass=SingletonMeta):
         self.screen_height = int(os.getenv("SCREEN_HEIGHT", 700))
         self.midi_driver = os.getenv("MIDI_DRIVER", "alsa_seq")
         self.audio_driver = os.getenv("AUDIO_DRIVER", "pulseaudio")
+        self.sample_rate = float(os.getenv("SAMPLE_RATE", 48000.0))

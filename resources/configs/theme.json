@@ -1,0 +1,53 @@
+{
+    "defaults": {
+        "colours": {
+            "dark_bg": "#259372",
+            "hovered_bg": "#14795A",
+            "normal_text": "#FFd6b6",
+            "normal_border": "#075A41"
+        }
+    },
+    "#bpm_label": {
+        "font": {
+            "name": "monogram",
+            "size": 32,
+            "bold": 0,
+            "italic": 0
+        }
+    },
+    "#bottom_bar": {
+        "colours": {
+            "normal_border": "#14795A"
+        },
+        "misc": {
+            "border_width": "0",
+            "shadow_width": "0"
+        }
+    },
+    "#bpm_container": {
+        "colours": {
+            "normal_border": "#259372"
+        },
+        "misc": {
+            "border_width": "0",
+            "shadow_width": "0"
+        }
+    },
+    "#bpm_textbox": {
+        "colours": {
+            "dark_bg": "#5BC4A4",
+            "normal_border": "#14795A",
+            "normal_text": "#88370B"
+        },
+        "font": {
+            "name": "monogram",
+            "size": 32,
+            "bold": 0,
+            "italic": 0
+        },
+        "misc": {
+            "border_width": "2",
+            "shadow_width": "0"
+        }
+    }
+}

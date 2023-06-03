@@ -33,7 +33,7 @@ class Game:
             self.ui.process_events(event)
 
     def render(self, screen: pygame.Surface):
-        screen.fill("#ffffff")
+        screen.fill("#5BC4A4")
         self.ui.render(screen)
 
         pygame.display.flip()

@@ -17,12 +17,14 @@ def start(
 ):
     configs = Configs()
 
-    fs = fluidsynth.Synth(samplerate=48000.0, channels=128)
+    fs = fluidsynth.Synth(samplerate=configs.sample_rate, channels=128)
 
-    fs.setting("synth.sample-rate", 48000.0)
+    fs.setting("synth.sample-rate", configs.sample_rate)
     fs.setting("synth.reverb.active", 1)
     fs.setting("synth.chorus.active", 1)
-    fs.setting("audio.jack.autoconnect", 1)
+
+    if configs.audio_driver == "jack":
+        fs.setting("audio.jack.autoconnect", 1)
 
     print(f"Audio Driver: {configs.audio_driver}")
     print(f"MIDI Driver: {configs.midi_driver}")
