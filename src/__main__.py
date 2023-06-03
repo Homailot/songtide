@@ -1,7 +1,7 @@
 import sys
 from enum import Enum
 from multiprocessing import Process, Event, Manager
-from soundengine import soundengine
+from src.soundengine import soundengine
 from src.config import Configs
 
 import fluidsynth
