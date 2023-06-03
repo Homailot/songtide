@@ -3,12 +3,14 @@ from enum import Enum
 from multiprocessing import Event, Process, Queue
 
 import pygame
+import pygame_gui
 
-from src.commands import CreateMonsterCommand, UpdateClockBpmCommand
+from src.commands import CreateMonsterCommand
 from src.config import Configs
 from src.monsters.fractalmonster import EtherealEcho
 from src.monsters.monsterrepository import MonsterRepository
 from src.soundengine import soundengine
+from src.ui import UI
 
 
 class GameState(Enum):
@@ -28,11 +30,16 @@ class Game:
             if event.type == pygame.QUIT:
                 self.state = GameState.STOPPED
 
+            self.ui.process_events(event)
+
     def render(self, screen: pygame.Surface):
-        screen.fill("purple")
+        screen.fill("#ffffff")
+        self.ui.render(screen)
+
         pygame.display.flip()
 
     def update(self):
+        self.ui.update(self.delta_time)
         pass
 
     def handle_run(self, screen: pygame.Surface):
@@ -51,29 +58,32 @@ class Game:
         screen = pygame.display.set_mode((configs.screen_width, configs.screen_height))
         pygame.display.set_caption("Songtide")
 
+        self.manager = pygame_gui.UIManager(
+            (configs.screen_width, configs.screen_height)
+        )
         self.clock = pygame.time.Clock()
-        self.delta_time = 0.0
+        self.delta_time = 0
         self.lag = 0.0
         self.monster_repository = MonsterRepository()
-
         self.state = GameState.RUNNING
+        self.ui = UI()
 
         stop_event = Event()
         monster_command_queue = Queue()
         clock_command_queue = Queue()
 
-        soundengine_process = Process(
-            target=soundengine.start,
-            args=(stop_event, monster_command_queue, clock_command_queue, 80),
-        )
-        soundengine_process.start()
+        # soundengine_process = Process(
+        #     target=soundengine.start,
+        #     args=(stop_event, monster_command_queue, clock_command_queue, 80),
+        # )
+        # soundengine_process.start()
 
-        monster = EtherealEcho((0.4, 0.5))
-        id = self.monster_repository.add_monster(monster)
-        create_monster_command = CreateMonsterCommand(id, type(monster), (0.4, 0.5))
-        monster_command_queue.put(create_monster_command)
+        # monster = EtherealEcho((0.4, 0.5))
+        # id = self.monster_repository.add_monster(monster)
+        # create_monster_command = CreateMonsterCommand(id, type(monster), (0.4, 0.5))
+        # monster_command_queue.put(create_monster_command)
 
-        clock_command_queue.put(UpdateClockBpmCommand(40))
+        # clock_command_queue.put(UpdateClockBpmCommand(40))
 
         running = True
         while running:
@@ -89,7 +99,7 @@ class Game:
             self.lag += self.delta_time
 
         stop_event.set()
-        soundengine_process.join()
+        # soundengine_process.join()
 
         pygame.quit()
         sys.exit()

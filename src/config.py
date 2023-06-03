@@ -30,5 +30,5 @@ class Configs(metaclass=SingletonMeta):
         self.soundfont_path = os.getenv("SOUNDFONT_PATH", "soundfonts/EarthBound.sf2")
         self.screen_width = int(os.getenv("SCREEN_WIDTH", 1280))
         self.screen_height = int(os.getenv("SCREEN_HEIGHT", 700))
-        self.midi_driver = os.getenv("MIDI_DRIVER", "jack")
-        self.audio_driver = os.getenv("AUDIO_DRIVER", "pipewire")
+        self.midi_driver = os.getenv("MIDI_DRIVER", "alsa_seq")
+        self.audio_driver = os.getenv("AUDIO_DRIVER", "pulseaudio")

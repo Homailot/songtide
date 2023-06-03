@@ -22,6 +22,10 @@ def start(
     fs.setting("synth.sample-rate", 48000.0)
     fs.setting("synth.reverb.active", 1)
     fs.setting("synth.chorus.active", 1)
+    fs.setting("audio.jack.autoconnect", 1)
+
+    print(f"Audio Driver: {configs.audio_driver}")
+    print(f"MIDI Driver: {configs.midi_driver}")
 
     fs.start(driver=configs.audio_driver, midi_driver=configs.midi_driver, device=0)
 
