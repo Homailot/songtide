@@ -4,20 +4,22 @@ from multiprocessing import Event
 from src.clock import Clock
 import os
 from src.config import Configs
-from src.monsters.monster import Monster
+from src.monsters import Monster
 from src.monsters.fractalmonster import FractalMonster
 from src.soundengine.sound import Sound
+from src.utils import Octaver
+from src.utils.scales import compute_scale, Intervals
 
 def start(stop_event: Event, bpm: int):
     configs = Configs()
 
-    fs = fluidsynth.Synth(samplerate=44100.0, channels=128)
+    fs = fluidsynth.Synth(samplerate=48000.0, channels=128)
 
-    fs.setting("synth.sample-rate", 44100.0)
+    fs.setting("synth.sample-rate", 48000.0)
     fs.setting("synth.reverb.active", 1)
     fs.setting("synth.chorus.active", 1)
 
-    fs.start(driver="pipewire", midi_driver="jack", device=0)
+    fs.start(driver="pipewire", midi_driver="alsa_seq", device=0)
     
     fs.setting("synth.gain", 0.67)
 
@@ -25,12 +27,13 @@ def start(stop_event: Event, bpm: int):
     fs.set_chorus(22, 0.23, 1, 6.8, 0)
 
     sfid = fs.sfload(configs.soundfont_path)
-    fs.program_select(0, sfid, 0, 0)
+    fs.program_select(0, sfid, 0, 45)
 
     monsters: list[Monster] = []
     sounds: list[Sound] = []
 
-    monsters.append(FractalMonster((0.5, 0.5,)))
+    octaver = Octaver(compute_scale(0, Intervals.Major), 2)
+    monsters.append(FractalMonster((0.3, 0.5,), octaver))
 
     clock = Clock(bpm)
     while True:
