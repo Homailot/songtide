@@ -36,6 +36,6 @@ class Sound:
             return True
         return False
 
-    def update_bpm(self, new_bpm: float):
-        self.init = self.init * self.bpm / new_bpm
-        self.duration = self.duration * self.bpm / new_bpm
+    def update_bpm(self, old_bpm: float, new_bpm: float):
+        self.init = self.init * old_bpm / new_bpm
+        self.duration = self.duration * old_bpm / new_bpm

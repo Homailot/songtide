@@ -66,22 +66,23 @@ class Game:
         self.lag = 0.0
         self.monster_repository = MonsterRepository()
         self.state = GameState.RUNNING
-        self.ui = UI()
 
         stop_event = Event()
         monster_command_queue = Queue()
         clock_command_queue = Queue()
 
-        # soundengine_process = Process(
-        #     target=soundengine.start,
-        #     args=(stop_event, monster_command_queue, clock_command_queue, 80),
-        # )
-        # soundengine_process.start()
+        soundengine_process = Process(
+            target=soundengine.start,
+            args=(stop_event, monster_command_queue, clock_command_queue, 80),
+        )
+        soundengine_process.start()
 
-        # monster = EtherealEcho((0.4, 0.5))
-        # id = self.monster_repository.add_monster(monster)
-        # create_monster_command = CreateMonsterCommand(id, type(monster), (0.4, 0.5))
-        # monster_command_queue.put(create_monster_command)
+        self.ui = UI(clock_command_queue)
+
+        monster = EtherealEcho((0.4, 0.5))
+        id = self.monster_repository.add_monster(monster)
+        create_monster_command = CreateMonsterCommand(id, type(monster), (0.4, 0.5))
+        monster_command_queue.put(create_monster_command)
 
         # clock_command_queue.put(UpdateClockBpmCommand(40))
 

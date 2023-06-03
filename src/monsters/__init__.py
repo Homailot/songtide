@@ -44,6 +44,8 @@ class Monster(ABC):
     next_sound: Sound | None = None
     plugins: list[MonsterPlugin] = []
     plugin_parameters: list[PluginParameter] = []
+    last_beat: float = 0.0
+    last_duration: float = 0.0
 
     @abstractmethod
     def __init__(self, position: tuple[float, float], channel: int = 0):
@@ -90,13 +92,17 @@ class Monster(ABC):
             for plugin in self.plugins:
                 note, duration, rest = plugin.transform(note, duration, rest)
 
+            next_beat = self.last_beat + self.last_duration + rest
+            self.last_beat = next_beat
+            self.last_duration = duration
+
             self.next_sound = self.generate_next_sound_internal(
-                current_beat, note, duration, rest
+                next_beat, note, duration, rest
             )
 
     @abstractmethod
     def generate_next_sound_internal(
-        self, current_beat: float, note: int, duration: float, rest: float
+        self, next_beat: float, note: int, duration: float, rest: float
     ) -> Sound:
         pass
 
@@ -140,3 +146,9 @@ class Monster(ABC):
 
     def unmute(self):
         self.muted = False
+
+    def update_bpm(self, old_bpm: float, new_bpm: float):
+        self.last_beat = self.last_beat * old_bpm / new_bpm
+        self.last_duration = self.last_duration * old_bpm / new_bpm
+        if self.next_sound is not None:
+            self.next_sound.update_bpm(old_bpm, new_bpm)

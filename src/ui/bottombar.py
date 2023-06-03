@@ -1,10 +1,15 @@
-import pygame_gui
-import pygame
+from multiprocessing import Queue
 
+import pygame
+import pygame_gui
+
+from src.commands import UpdateClockBpmCommand
 from src.config import Configs
+from src.ui.components import TextEntryWithCallback
+
 
 class BottomBar:
-    def __init__(self, ui_manager: pygame_gui.UIManager):
+    def __init__(self, ui_manager: pygame_gui.UIManager, clock_command_queue: Queue):
         configs = Configs()
 
         self.ui_manager = ui_manager
@@ -33,12 +38,30 @@ class BottomBar:
             object_id="#bpm_label",
         )
         text_rect = pygame.Rect(10, 0, 80, 40)
-        self.bpm_textbox = pygame_gui.elements.UITextEntryLine(
+        self.bpm_textbox = TextEntryWithCallback(
+            callback=lambda: self.process_bpm(),
             relative_rect=text_rect,
             manager=self.ui_manager,
             container=self.bpm_container,
             object_id="#bpm_textbox",
             initial_text="80",
-            anchors={"top_target": self.bpm_label}
+            anchors={"top_target": self.bpm_label},
         )
-        self.bpm_textbox.set_allowed_characters(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."])
+        self.bpm_textbox.set_allowed_characters(
+            ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
+        )
+        self.clock_command_queue = clock_command_queue
+
+    def process_events(self, event: pygame.event.Event):
+        if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
+            self.bpm_textbox.callback()
+
+    def process_bpm(self):
+        bpm = self.bpm_textbox.get_text()
+        try:
+            bpm = float(bpm)
+        except ValueError:
+            bpm = 80
+            self.bpm_textbox.set_text(str(bpm))
+
+        self.clock_command_queue.put(UpdateClockBpmCommand(bpm))

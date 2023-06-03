@@ -2,7 +2,7 @@ from time import perf_counter
 
 
 class Clock:
-    def __init__(self, bpm: int):
+    def __init__(self, bpm: float):
         self.bpm = bpm
         self.seconds_per_beat = 60 / self.bpm
         self.previous_time = perf_counter()
@@ -11,7 +11,7 @@ class Clock:
     def update(self, delta_time: float):
         self.current_beat += delta_time / self.seconds_per_beat
 
-    def change_bpm(self, bpm: int):
+    def change_bpm(self, bpm: float):
         self.current_beat = self.current_beat * self.bpm / bpm
 
         self.bpm = bpm

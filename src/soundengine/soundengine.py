@@ -13,7 +13,7 @@ def start(
     stop_event: Event,
     monster_command_queue: "Queue[MonsterCommand]",
     clock_command_queue: "Queue[ClockCommand]",
-    bpm: int,
+    bpm: float,
 ):
     configs = Configs()
 
@@ -52,10 +52,16 @@ def start(
 
         while not clock_command_queue.empty():
             command = clock_command_queue.get()
+            old_bpm = clock.bpm
+            print(f"Old BPM: {old_bpm}")
             command.execute(clock)
+            print(f"New BPM: {clock.bpm}")
 
             for sound in sounds:
-                sound.update_clock_bpm(clock.bpm)
+                sound.update_bpm(old_bpm, clock.bpm)
+
+            for monster in monsters.values():
+                monster.update_bpm(old_bpm, clock.bpm)
 
         current_beat = clock.tick()
 

@@ -18,9 +18,6 @@ class EtherealEcho(Monster):
         position of the monster.
     """
 
-    last_beat: float = 0.0
-    last_duration: float = 0.0
-
     def __init__(
         self,
         position: tuple[float, float],
@@ -97,12 +94,8 @@ class EtherealEcho(Monster):
         self.velocity = int(position[1] * 80) + 20
 
     def generate_next_sound_internal(
-        self, current_beat: float, note: int, duration: float, rest: float
+        self, next_beat: float, note: int, duration: float, rest: float
     ) -> Sound:
-        next_beat = self.last_beat + self.last_duration + rest
-        self.last_beat = next_beat
-        self.last_duration = duration
-
         return Sound(
             0, note + self.starting_value, self.velocity, next_beat + 0.05, duration
         )
