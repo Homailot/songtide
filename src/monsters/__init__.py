@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+
 from src.soundengine.sound import Sound
+
 
 class Monster(ABC):
     """
@@ -14,6 +16,7 @@ class Monster(ABC):
         It is a tuple of the x and y coordinates,
         ranging from 0 to 1.
     """
+
     next_sound: Sound | None = None
 
     @abstractmethod
@@ -60,7 +63,7 @@ class Monster(ABC):
         if not self.muted and current_beat >= self.next_sound.init:
             if self.next_sound == None:
                 self.generate_next_sound(current_beat)
-            
+
             print(f"Monster {self} made sound {self.next_sound}")
             sound = self.next_sound
             self.next_sound = None

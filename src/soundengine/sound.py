@@ -1,5 +1,7 @@
-import fluidsynth
 from time import perf_counter
+
+import fluidsynth
+
 
 class Sound:
     """A sound that can be played by the sound engine.
@@ -18,7 +20,9 @@ class Sound:
         The duration of the sound in beats.
     """
 
-    def __init__(self, channel: int, note: int, velocity: int, init: float,  duration: float):
+    def __init__(
+        self, channel: int, note: int, velocity: int, init: float, duration: float
+    ):
         self.channel = channel
         self.velocity = velocity
         self.note = note

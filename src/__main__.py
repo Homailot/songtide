@@ -1,11 +1,13 @@
 import sys
 from enum import Enum
-from multiprocessing import Process, Event, Manager
-from src.soundengine import soundengine
-from src.config import Configs
+from multiprocessing import Event, Manager, Process
 
 import fluidsynth
 import pygame
+
+from src.config import Configs
+from src.soundengine import soundengine
+
 
 class GameState(Enum):
     RUNNING = 0
@@ -55,7 +57,9 @@ class Game:
 
         with Manager() as manager:
             stop_event = manager.Event()
-            soundengine_process = Process(target=soundengine.start, args=(stop_event, 80))
+            soundengine_process = Process(
+                target=soundengine.start, args=(stop_event, 80)
+            )
             soundengine_process.start()
 
             running = True

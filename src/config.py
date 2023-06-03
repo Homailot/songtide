@@ -1,7 +1,7 @@
-from dotenv import load_dotenv
 import os
-
 from threading import Lock, Thread
+
+from dotenv import load_dotenv
 
 
 class SingletonMeta(type):

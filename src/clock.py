@@ -1,5 +1,6 @@
 from time import perf_counter
 
+
 class Clock:
     def __init__(self, bpm: int):
         self.bpm = bpm

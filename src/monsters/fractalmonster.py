@@ -1,7 +1,8 @@
-from src.monsters import Monster
 from src.generative import fractal
+from src.monsters import Monster
 from src.soundengine.sound import Sound
 from src.utils import Octaver
+
 
 class FractalMonster(Monster):
     """Monster that generates a sound based on the Morse-Thue sequence.
@@ -26,7 +27,13 @@ class FractalMonster(Monster):
         position of the monster.
     """
 
-    def __init__(self, position: tuple[float, float], octaver: Octaver, starting_duration: float = 1.0, channel: int = 0):
+    def __init__(
+        self,
+        position: tuple[float, float],
+        octaver: Octaver,
+        starting_duration: float = 1.0,
+        channel: int = 0,
+    ):
         super().__init__(position, channel)
         self.base = 3
         self.multiplier = 33
@@ -52,9 +59,11 @@ class FractalMonster(Monster):
         """
         if self.next_sound is None:
             note = fractal.morse_thue_value(self.counter, self.base, self.multiplier)
-            duration = fractal.morse_thue_value(self.counter, self.duration_base, self.duration_multiplier)
+            duration = fractal.morse_thue_value(
+                self.counter, self.duration_base, self.duration_multiplier
+            )
             duration = duration % (self.max_duration)
-            duration = self.starting_duration / (2 ** duration)
+            duration = self.starting_duration / (2**duration)
 
             print(f"Note: {note}, Duration: {duration}")
             note = self.octaver(note)
@@ -63,5 +72,7 @@ class FractalMonster(Monster):
             self.last_beat = next_beat
             self.last_duration = duration
 
-            self.next_sound = Sound(0, note + self.starting_value, self.velocity, next_beat + 0.05, duration)
+            self.next_sound = Sound(
+                0, note + self.starting_value, self.velocity, next_beat + 0.05, duration
+            )
             self.counter += 1
