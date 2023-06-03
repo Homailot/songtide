@@ -1,15 +1,15 @@
-from multiprocessing import Event
+from multiprocessing import Event, Queue
 
 import fluidsynth
 
 from src.clock import Clock
+from src.commands import MonsterCommand
 from src.config import Configs
 from src.monsters import Monster
-from src.monsters.fractalmonster import EtherealEcho
 from src.soundengine.sound import Sound
 
 
-def start(stop_event: Event, bpm: int):
+def start(stop_event: Event, monster_command_queue: "Queue[MonsterCommand]", bpm: int):
     configs = Configs()
 
     fs = fluidsynth.Synth(samplerate=48000.0, channels=128)
@@ -28,18 +28,25 @@ def start(stop_event: Event, bpm: int):
     sfid = fs.sfload(configs.soundfont_path)
     fs.program_select(0, sfid, 0, 32)
 
-    monsters: list[Monster] = []
+    monsters: dict[int, Monster] = {}
     sounds: list[Sound] = []
 
-    monsters.append(EtherealEcho((0.5, 0.5)))
+    # monsters.append(EtherealEcho((0.5, 0.5)))
 
     clock = Clock(bpm)
     while True:
+        while not monster_command_queue.empty():
+            command = monster_command_queue.get()
+            command.execute(monsters)
+
         current_beat = clock.tick()
 
-        # TODO: MOVE THIS TO A SEPARATE THREAD
-        for monster in monsters:
+        # TODO: MOVE THIS TO A SEPARATE THREAD, maybe?
+        for monster in monsters.values():
             monster.generate_next_sound(current_beat)
+
+            # Generate next sound can take some time, so we get the current beat again so it is accurate
+            current_beat = clock.tick()
 
         sounds_to_remove: list[Sound] = []
 
@@ -50,7 +57,7 @@ def start(stop_event: Event, bpm: int):
         for sound in sounds_to_remove:
             sounds.remove(sound)
 
-        for monster in monsters:
+        for monster in monsters.values():
             sound = monster.make_sound(current_beat)
             if sound != None:
                 sound.play(fs)

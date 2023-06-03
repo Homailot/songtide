@@ -1,11 +1,13 @@
 import sys
 from enum import Enum
-from multiprocessing import Manager, Process
+from multiprocessing import Event, Manager, Process, Queue
 
-import fluidsynth
 import pygame
+from src.commands import CreateMonsterCommand
 
 from src.config import Configs
+from src.monsters.monsterrepository import MonsterRepository
+from src.monsters.fractalmonster import EtherealEcho
 from src.soundengine import soundengine
 
 
@@ -52,39 +54,43 @@ class Game:
         self.clock = pygame.time.Clock()
         self.delta_time = 0.0
         self.lag = 0.0
+        self.monster_repository = MonsterRepository()
 
         self.state = GameState.RUNNING
 
-        with Manager() as manager:
-            stop_event = manager.Event()
-            soundengine_process = Process(
-                target=soundengine.start, args=(stop_event, 80)
-            )
-            soundengine_process.start()
+        stop_event = Event()
+        monster_command_queue = Queue()
 
-            running = True
-            while running:
-                match self.state:
-                    case GameState.RUNNING:
-                        self.handle_run(screen)
-                    case GameState.STOPPED:
-                        running = False
-                    case _:
-                        pass
+        soundengine_process = Process(
+            target=soundengine.start, args=(stop_event, monster_command_queue, 80)
+        )
+        soundengine_process.start()
 
-                self.delta_time = self.clock.tick(60)
-                self.lag += self.delta_time
+        monster = EtherealEcho((0.4, 0.5))
+        id = self.monster_repository.add_monster(monster)
+        create_monster_command = CreateMonsterCommand(id, type(monster), (0.4, 0.5))
+        monster_command_queue.put(create_monster_command)
 
-            stop_event.set()
-            soundengine_process.join()
+        running = True
+        while running:
+            match self.state:
+                case GameState.RUNNING:
+                    self.handle_run(screen)
+                case GameState.STOPPED:
+                    running = False
+                case _:
+                    pass
 
-            pygame.quit()
-            sys.exit()
+            self.delta_time = self.clock.tick(60)
+            self.lag += self.delta_time
+
+        stop_event.set()
+        soundengine_process.join()
+
+        pygame.quit()
+        sys.exit()
 
 
 if __name__ == "__main__":
-    fs = fluidsynth.Synth()
-    fs.delete()
-
     game = Game()
     game.start()

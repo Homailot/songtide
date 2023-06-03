@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Callable, Type
 
 from src.clock import Clock
 from src.monsters import Monster
@@ -24,11 +25,13 @@ class CreateMonsterCommand(MonsterCommand):
         The ID of the monster.
     """
 
-    def __init__(self, id: int):
+    def __init__(self, id: int, monster_type: Type[Monster], position: tuple[int, int]):
         self.id = id
+        self.monster_type = monster_type
+        self.position = position
 
     def execute(self, monster_dict: dict[int, Monster]):
-        monster_dict[self.id] = Monster(self.id)
+        monster_dict[self.id] = self.monster_type(self.position)
 
 
 class DeleteMonsterCommand(MonsterCommand):
