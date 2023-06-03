@@ -1,13 +1,13 @@
 import sys
 from enum import Enum
-from multiprocessing import Event, Manager, Process, Queue
+from multiprocessing import Event, Process, Queue
 
 import pygame
-from src.commands import CreateMonsterCommand
 
+from src.commands import CreateMonsterCommand, UpdateClockBpmCommand
 from src.config import Configs
-from src.monsters.monsterrepository import MonsterRepository
 from src.monsters.fractalmonster import EtherealEcho
+from src.monsters.monsterrepository import MonsterRepository
 from src.soundengine import soundengine
 
 
@@ -60,9 +60,11 @@ class Game:
 
         stop_event = Event()
         monster_command_queue = Queue()
+        clock_command_queue = Queue()
 
         soundengine_process = Process(
-            target=soundengine.start, args=(stop_event, monster_command_queue, 80)
+            target=soundengine.start,
+            args=(stop_event, monster_command_queue, clock_command_queue, 80),
         )
         soundengine_process.start()
 
@@ -70,6 +72,8 @@ class Game:
         id = self.monster_repository.add_monster(monster)
         create_monster_command = CreateMonsterCommand(id, type(monster), (0.4, 0.5))
         monster_command_queue.put(create_monster_command)
+
+        clock_command_queue.put(UpdateClockBpmCommand(40))
 
         running = True
         while running:

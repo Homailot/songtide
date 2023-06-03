@@ -47,5 +47,3 @@ class MonsterRepository:
             The monster.
         """
         return self.monsters[monster_id]
-
-    

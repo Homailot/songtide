@@ -3,13 +3,18 @@ from multiprocessing import Event, Queue
 import fluidsynth
 
 from src.clock import Clock
-from src.commands import MonsterCommand
+from src.commands import ClockCommand, MonsterCommand
 from src.config import Configs
 from src.monsters import Monster
 from src.soundengine.sound import Sound
 
 
-def start(stop_event: Event, monster_command_queue: "Queue[MonsterCommand]", bpm: int):
+def start(
+    stop_event: Event,
+    monster_command_queue: "Queue[MonsterCommand]",
+    clock_command_queue: "Queue[ClockCommand]",
+    bpm: int,
+):
     configs = Configs()
 
     fs = fluidsynth.Synth(samplerate=48000.0, channels=128)
@@ -18,7 +23,7 @@ def start(stop_event: Event, monster_command_queue: "Queue[MonsterCommand]", bpm
     fs.setting("synth.reverb.active", 1)
     fs.setting("synth.chorus.active", 1)
 
-    fs.start(driver="pipewire", midi_driver="jack", device=0)
+    fs.start(driver=configs.audio_driver, midi_driver=configs.midi_driver, device=0)
 
     fs.setting("synth.gain", 0.67)
 
@@ -38,6 +43,13 @@ def start(stop_event: Event, monster_command_queue: "Queue[MonsterCommand]", bpm
         while not monster_command_queue.empty():
             command = monster_command_queue.get()
             command.execute(monsters)
+
+        while not clock_command_queue.empty():
+            command = clock_command_queue.get()
+            command.execute(clock)
+
+            for sound in sounds:
+                sound.update_clock_bpm(clock.bpm)
 
         current_beat = clock.tick()
 
