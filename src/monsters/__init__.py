@@ -51,6 +51,17 @@ class Monster(ABC):
         self.position = position
         self.channel = channel
 
+    @abstractmethod
+    def change_position(self, position: tuple[float, float]):
+        """Changes the position of the monster.
+
+        Parameters
+        ----------
+        position : tuple[float, float]
+            The new position of the monster.
+        """
+        pass
+
     def add_plugin(self, plugin: MonsterPlugin):
         """Adds a plugin to the monster.
 

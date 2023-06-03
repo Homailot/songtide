@@ -84,6 +84,18 @@ class EtherealEcho(Monster):
             ),
         ]
 
+    def change_position(self, position: tuple[float, float]):
+        """Changes the position of the monster.
+
+        Parameters
+        ----------
+        position : tuple[float, float]
+            The new position of the monster.
+        """
+        self.position = position
+        self.starting_value = int(position[0] * 80) + 20
+        self.velocity = int(position[1] * 80) + 20
+
     def generate_next_sound_internal(
         self, current_beat: float, note: int, duration: float, rest: float
     ) -> Sound:
