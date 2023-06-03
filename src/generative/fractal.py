@@ -1,8 +1,3 @@
-import math
-
-import numpy as np
-
-
 def number_to_base(num: int, base: int) -> list[int]:
     """Converts a number to a list of digits in a given base.
 

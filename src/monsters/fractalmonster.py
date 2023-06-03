@@ -1,24 +1,15 @@
-from src.generative import fractal
-from src.monsters import Monster
+from src.monsters import Monster, PluginParameter
+from src.plugins import ConstantRestPlugin
+from src.plugins.fractal import FractalDurationPlugin, FractalNotePlugin
+from src.plugins.octaver import OctavePlugin
 from src.soundengine.sound import Sound
-from src.utils import Octaver
 
 
-class FractalMonster(Monster):
-    """Monster that generates a sound based on the Morse-Thue sequence.
+class EtherealEcho(Monster):
+    """Monster that generates long, ethereal notes.
 
     Attributes
     ----------
-    base : int
-        The number base.
-    multiplier : int
-        The multiplier value.
-    duration_base : int
-        The number base used for generating the duration.
-    duration_multiplier : int
-        The multiplier value used for generating the duration.
-    counter : int
-        The counter value. Indicates the current position in the sequence.
     starting_value : int
         The starting value for the sequence. It is a MIDI note,
         and is calculated based on the horizontal position of the monster.
@@ -27,52 +18,79 @@ class FractalMonster(Monster):
         position of the monster.
     """
 
+    last_beat: float = 0.0
+    last_duration: float = 0.0
+
     def __init__(
         self,
         position: tuple[float, float],
-        octaver: Octaver,
-        starting_duration: float = 1.0,
-        channel: int = 0,
     ):
-        super().__init__(position, channel)
-        self.base = 3
-        self.multiplier = 33
-        self.duration_base = 3
-        self.duration_multiplier = 33
-        self.counter = 0
+        super().__init__(position, 0)
         self.starting_value = int(position[0] * 80) + 20
         self.velocity = int(position[1] * 80) + 20
-        self.starting_duration = starting_duration
-        self.max_duration = 3.0
-        self.octaver = octaver
 
-        self.last_beat = 0.0
-        self.last_duration = 0.0
+        self.fractal_note_plugin = FractalNotePlugin(3, 33)
+        self.fractal_duration_plugin = FractalDurationPlugin(3, 33)
+        self.constant_rest_plugin = ConstantRestPlugin(1)
+        self.octave_plugin = OctavePlugin(0, 2)
 
-    def generate_next_sound(self, current_beat: float):
-        """Generates the next sound for the monster.
+        self.plugins = [
+            self.fractal_note_plugin,
+            self.fractal_duration_plugin,
+            self.constant_rest_plugin,
+            self.octave_plugin,
+        ]
 
-        Parameters
-        ----------
-        current_beat : float
-            The current beat of the clock.
-        """
-        if self.next_sound is None:
-            note = fractal.morse_thue_value(self.counter, self.base, self.multiplier)
-            duration = fractal.morse_thue_value(
-                self.counter, self.duration_base, self.duration_multiplier
-            )
-            duration = duration % (self.max_duration)
-            duration = self.starting_duration / (2**duration)
+        self.plugin_parameters = [
+            PluginParameter(
+                "Jiveness",
+                self.fractal_duration_plugin.starting_duration,
+                0.5,
+                3,
+                lambda value: self.fractal_duration_plugin.set_starting_duration(value),
+                0.25,
+            ),
+            PluginParameter(
+                "Quirkiness",
+                self.fractal_duration_plugin.max_duration,
+                2,
+                5,
+                lambda value: self.fractal_duration_plugin.set_max_duration(value),
+                1,
+            ),
+            PluginParameter(
+                "Sleepiness",
+                self.constant_rest_plugin.rest,
+                0,
+                1,
+                lambda value: self.constant_rest_plugin.set_rest(value),
+                0.25,
+            ),
+            PluginParameter(
+                "Emotion",
+                self.octave_plugin.interval_num,
+                0,
+                1,
+                lambda value: self.octave_plugin.set_intervals(value),
+                1,
+            ),
+            PluginParameter(
+                "Range",
+                self.octave_plugin.num_octaves,
+                1,
+                3,
+                lambda value: self.octave_plugin.set_num_octaves(value),
+                1,
+            ),
+        ]
 
-            print(f"Note: {note}, Duration: {duration}")
-            note = self.octaver(note)
+    def generate_next_sound_internal(
+        self, current_beat: float, note: int, duration: float, rest: float
+    ) -> Sound:
+        next_beat = self.last_beat + self.last_duration + rest
+        self.last_beat = next_beat
+        self.last_duration = duration
 
-            next_beat = self.last_beat + self.last_duration
-            self.last_beat = next_beat
-            self.last_duration = duration
-
-            self.next_sound = Sound(
-                0, note + self.starting_value, self.velocity, next_beat + 0.05, duration
-            )
-            self.counter += 1
+        return Sound(
+            0, note + self.starting_value, self.velocity, next_beat + 0.05, duration
+        )

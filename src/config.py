@@ -1,5 +1,5 @@
 import os
-from threading import Lock, Thread
+from threading import Lock
 
 from dotenv import load_dotenv
 

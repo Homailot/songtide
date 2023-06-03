@@ -1,6 +1,6 @@
 import sys
 from enum import Enum
-from multiprocessing import Event, Manager, Process
+from multiprocessing import Manager, Process
 
 import fluidsynth
 import pygame

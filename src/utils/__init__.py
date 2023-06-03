@@ -1,34 +1,26 @@
-from typing import Any
+def octaver(scale: list[int], num_octaves: int, index: int) -> int:
+    """Octaves a note.
 
+    Parameters
+    ----------
+    scale : list[int]
+        The scale to use for the octave.
 
-class Octaver(object):
-    def __init__(self, scale: list[int], num_octaves: int) -> None:
-        self.scale = scale
-        self.num_octaves = num_octaves
+    num_octaves : int
+        The number of octaves to use.
 
-    def __call__(self, index: int) -> int:
-        """Octaves a note.
+    index : int
+        The index to octave.
 
-        Parameters
-        ----------
-        scale : list[int]
-            The scale to use for the octave.
+    Returns
+    -------
+    int
+        The octaved note.
+    """
+    octave = index // len(scale)
+    if octave >= num_octaves:
+        octave = num_octaves - 1
+        index = len(scale) - 1
+    index = index % len(scale)
 
-        num_octaves : int
-            The number of octaves to use.
-
-        index : int
-            The index to octave.
-
-        Returns
-        -------
-        int
-            The octaved note.
-        """
-        octave = index // len(self.scale)
-        if octave >= self.num_octaves:
-            octave = self.num_octaves - 1
-            index = len(self.scale) - 1
-        index = index % len(self.scale)
-
-        return self.scale[index] + 12 * octave
+    return scale[index] + 12 * octave

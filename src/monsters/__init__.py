@@ -1,6 +1,30 @@
 from abc import ABC, abstractmethod
+from typing import Callable
 
+from src.plugins import MonsterPlugin
 from src.soundengine.sound import Sound
+
+
+class PluginParameter:
+    """A parameter for a plugin.
+    This is used to store the parameters of a plugin.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        value: float,
+        min: float,
+        max: float,
+        save: Callable[[float], None],
+        step: float = 0.1,
+    ):
+        self.name = name
+        self.value = value
+        self.min = min
+        self.max = max
+        self.save = save
+        self.step = step
 
 
 class Monster(ABC):
@@ -18,6 +42,8 @@ class Monster(ABC):
     """
 
     next_sound: Sound | None = None
+    plugins: list[MonsterPlugin] = []
+    plugin_parameters: list[PluginParameter] = []
 
     @abstractmethod
     def __init__(self, position: tuple[float, float], channel: int = 0):
@@ -25,7 +51,16 @@ class Monster(ABC):
         self.position = position
         self.channel = channel
 
-    @abstractmethod
+    def add_plugin(self, plugin: MonsterPlugin):
+        """Adds a plugin to the monster.
+
+        Parameters
+        ----------
+        plugin : MonsterPlugin
+            The plugin to add.
+        """
+        self.plugins.append(plugin)
+
     def generate_next_sound(self, current_beat: float):
         """Generates the next sound for the monster.
         This is so that monsters can pre-generate their sounds
@@ -36,6 +71,22 @@ class Monster(ABC):
         current_beat : float
             The current beat of the clock.
         """
+        if self.next_sound is None:
+            note = 0.0
+            duration = 0.0
+            rest = 0.0
+
+            for plugin in self.plugins:
+                note, duration, rest = plugin.transform(note, duration, rest)
+
+            self.next_sound = self.generate_next_sound_internal(
+                current_beat, note, duration, rest
+            )
+
+    @abstractmethod
+    def generate_next_sound_internal(
+        self, current_beat: float, note: int, duration: float, rest: float
+    ) -> Sound:
         pass
 
     def make_sound(self, current_beat: float) -> Sound | None:

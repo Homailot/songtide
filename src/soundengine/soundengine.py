@@ -1,16 +1,12 @@
-import os
 from multiprocessing import Event
-from time import perf_counter, sleep
 
 import fluidsynth
 
 from src.clock import Clock
 from src.config import Configs
 from src.monsters import Monster
-from src.monsters.fractalmonster import FractalMonster
+from src.monsters.fractalmonster import EtherealEcho
 from src.soundengine.sound import Sound
-from src.utils import Octaver
-from src.utils.scales import Intervals, compute_scale
 
 
 def start(stop_event: Event, bpm: int):
@@ -22,7 +18,7 @@ def start(stop_event: Event, bpm: int):
     fs.setting("synth.reverb.active", 1)
     fs.setting("synth.chorus.active", 1)
 
-    fs.start(driver="pipewire", midi_driver="alsa_seq", device=0)
+    fs.start(driver="pipewire", midi_driver="jack", device=0)
 
     fs.setting("synth.gain", 0.67)
 
@@ -30,21 +26,12 @@ def start(stop_event: Event, bpm: int):
     fs.set_chorus(22, 0.23, 1, 6.8, 0)
 
     sfid = fs.sfload(configs.soundfont_path)
-    fs.program_select(0, sfid, 0, 45)
+    fs.program_select(0, sfid, 0, 32)
 
     monsters: list[Monster] = []
     sounds: list[Sound] = []
 
-    octaver = Octaver(compute_scale(0, Intervals.Major), 2)
-    monsters.append(
-        FractalMonster(
-            (
-                0.3,
-                0.5,
-            ),
-            octaver,
-        )
-    )
+    monsters.append(EtherealEcho((0.5, 0.5)))
 
     clock = Clock(bpm)
     while True:
@@ -68,9 +55,6 @@ def start(stop_event: Event, bpm: int):
             if sound != None:
                 sound.play(fs)
                 sounds.append(sound)
-                print(
-                    f"Playing sound {sound.note} on channel {sound.channel} at beat {current_beat}"
-                )
 
         if stop_event.is_set():
             break
