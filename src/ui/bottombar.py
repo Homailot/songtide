@@ -7,6 +7,7 @@ import pygame_gui
 from src.commands import UpdateClockBpmCommand
 from src.config import Configs
 from src.monsters import Monster
+from src.monsters.monsterinfo import MonsterInfo
 from src.ui.components import TextEntryWithCallback
 
 
@@ -15,7 +16,7 @@ class BottomBar:
         self,
         ui_manager: pygame_gui.UIManager,
         clock_command_queue: Queue,
-        monster_images: dict[Type[Monster], pygame.Surface],
+        monster_info: dict[Type[Monster], MonsterInfo],
     ):
         configs = Configs()
 
@@ -69,13 +70,17 @@ class BottomBar:
         )
 
         left = 0
-        for monster_type, image in monster_images.items():
+        for monster_type, info in monster_info.items():
             monster_button = pygame_gui.elements.UIButton(
                 relative_rect=pygame.Rect(5 + left, 5, 60, 90),
                 text="",
                 manager=self.ui_manager,
                 container=self.monster_container,
-                object_id=image,
+                object_id=info.image,
+                tool_tip_text=f"<font face=monogram color=normal_text pixel_size=24>"
+                f"{info.name}</font>"
+                f"<font face=monogram color=normal_text pixel_size=16>{info.description}"
+                "</font>",
                 anchors={"left": "left", "top": "top"},
             )
             left += 65

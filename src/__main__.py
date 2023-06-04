@@ -10,6 +10,7 @@ from src.commands import CreateMonsterCommand
 from src.config import Configs
 from src.monsters import Monster
 from src.monsters.fractalmonster import EtherealEcho
+from src.monsters.monsterinfo import MonsterInfo
 from src.monsters.monsterrepository import MonsterRepository
 from src.soundengine import soundengine
 from src.ui import UI
@@ -23,23 +24,24 @@ class GameState(Enum):
 
 class Game:
     def __init__(self) -> None:
-        configs = Configs()
-
         self.state = GameState.STOPPED
         self.frames_per_second = 60
         self.milliseconds_per_frame = 1000 / self.frames_per_second
 
-        self.manager = pygame_gui.UIManager(
-            (configs.screen_width, configs.screen_height)
-        )
         self.clock = pygame.time.Clock()
         self.delta_time = 0
         self.lag = 0.0
         self.monster_repository = MonsterRepository()
         self.state = GameState.RUNNING
 
-        self.monster_images: dict[Type[Monster], str] = {
-            EtherealEcho: "#ethereal_button"
+        self.monster_info: dict[Type[Monster], MonsterInfo] = {
+            EtherealEcho: MonsterInfo(
+            "Ethereal Echo", 
+            "Mesmerizing creature that embodies the essence of music.<br>"
+            "Its translucent body shimmers with delicate hues, "
+            "reflecting the colors of the harmonies it creates",
+            "#ethereal_button"
+            )
         }
 
     def process_events(self):
@@ -74,6 +76,10 @@ class Game:
         screen = pygame.display.set_mode((configs.screen_width, configs.screen_height))
         pygame.display.set_caption("Songtide")
 
+        self.manager = pygame_gui.UIManager(
+            (configs.screen_width, configs.screen_height)
+        )
+
         stop_event = Event()
         monster_command_queue = Queue()
         clock_command_queue = Queue()
@@ -84,7 +90,7 @@ class Game:
         )
         soundengine_process.start()
 
-        self.ui = UI(clock_command_queue, self.monster_images)
+        self.ui = UI(clock_command_queue, self.monster_info)
 
         # monster = EtherealEcho((0.4, 0.5))
         # id = self.monster_repository.add_monster(monster)

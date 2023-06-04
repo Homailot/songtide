@@ -6,6 +6,7 @@ import pygame_gui
 
 from src.config import Configs
 from src.monsters import Monster
+from src.monsters.monsterinfo import MonsterInfo
 from src.ui.bottombar import BottomBar
 
 
@@ -13,7 +14,7 @@ class UI:
     def __init__(
         self,
         clock_command_queue: Queue,
-        monster_images: dict[Type[Monster], pygame.Surface],
+        monster_info: dict[Type[Monster], MonsterInfo],
     ) -> None:
         configs = Configs()
         self.manager = pygame_gui.UIManager(
@@ -21,11 +22,17 @@ class UI:
         )
         self.manager.add_font_paths("monogram", "resources/fonts/monogram.ttf")
         self.manager.preload_fonts(
-            [{"name": "monogram", "point_size": 32, "style": "regular"}]
+            [{"name": "monogram", "point_size": 32, "style": "regular"}],
+        )
+        self.manager.preload_fonts(
+            [{"name": "monogram", "point_size": 24, "style": "regular"}],
+        )
+        self.manager.preload_fonts(
+            [{"name": "monogram", "point_size": 16, "style": "regular"}],
         )
         self.manager.get_theme().load_theme("resources/configs/theme.json")
 
-        self.bottom_bar = BottomBar(self.manager, clock_command_queue, monster_images)
+        self.bottom_bar = BottomBar(self.manager, clock_command_queue, monster_info)
 
     def process_events(self, event: pygame.event.Event):
         self.manager.process_events(event)
