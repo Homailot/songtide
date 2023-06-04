@@ -129,14 +129,15 @@ class Monster(ABC):
         """
 
         if not self.muted and current_beat >= self.next_sound.init:
-            if self.next_sound == None:
+            if self.next_sound is None:
                 self.generate_next_sound(current_beat)
 
             print(f"Monster {self} made sound {self.next_sound}")
             sound = self.next_sound
             self.next_sound = None
             return sound
-        elif self.muted and current_beat >= self.next_sound.init:
+        
+        if self.muted and current_beat >= self.next_sound.init:
             self.next_sound = None
 
         return None

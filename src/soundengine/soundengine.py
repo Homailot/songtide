@@ -83,7 +83,7 @@ def start(
 
         for monster in monsters.values():
             sound = monster.make_sound(current_beat)
-            if sound != None:
+            if sound is not None:
                 sound.play(fs)
                 sounds.append(sound)
 

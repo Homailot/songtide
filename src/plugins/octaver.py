@@ -19,9 +19,9 @@ class OctavePlugin(MonsterPlugin):
     def set_intervals(self, intervals: int):
         match intervals:
             case 0:
-                self.scale = compute_scale(0, Intervals.Major)
+                self.scale = compute_scale(0, Intervals.MAJOR)
             case 1:
-                self.scale = compute_scale(0, Intervals.Minor)
+                self.scale = compute_scale(0, Intervals.MINOR)
 
         self.interval_num = intervals
 

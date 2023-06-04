@@ -23,9 +23,24 @@ class GameState(Enum):
 
 class Game:
     def __init__(self) -> None:
+        configs = Configs()
+
         self.state = GameState.STOPPED
         self.frames_per_second = 60
         self.milliseconds_per_frame = 1000 / self.frames_per_second
+
+        self.manager = pygame_gui.UIManager(
+            (configs.screen_width, configs.screen_height)
+        )
+        self.clock = pygame.time.Clock()
+        self.delta_time = 0
+        self.lag = 0.0
+        self.monster_repository = MonsterRepository()
+        self.state = GameState.RUNNING
+
+        self.monster_images: dict[Type[Monster], str] = {
+            EtherealEcho: "#ethereal_button"
+        }
 
     def process_events(self):
         for event in pygame.event.get():
@@ -42,7 +57,6 @@ class Game:
 
     def update(self):
         self.ui.update(self.delta_time)
-        pass
 
     def handle_run(self, screen: pygame.Surface):
         self.process_events()
@@ -60,15 +74,6 @@ class Game:
         screen = pygame.display.set_mode((configs.screen_width, configs.screen_height))
         pygame.display.set_caption("Songtide")
 
-        self.manager = pygame_gui.UIManager(
-            (configs.screen_width, configs.screen_height)
-        )
-        self.clock = pygame.time.Clock()
-        self.delta_time = 0
-        self.lag = 0.0
-        self.monster_repository = MonsterRepository()
-        self.state = GameState.RUNNING
-
         stop_event = Event()
         monster_command_queue = Queue()
         clock_command_queue = Queue()
@@ -78,10 +83,6 @@ class Game:
             args=(stop_event, monster_command_queue, clock_command_queue, 80),
         )
         soundengine_process.start()
-
-        self.monster_images: dict[Type[Monster], str] = {
-            EtherealEcho: "#ethereal_button"
-        }
 
         self.ui = UI(clock_command_queue, self.monster_images)
 

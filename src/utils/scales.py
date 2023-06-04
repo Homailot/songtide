@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class Intervals(Enum):
-    Major: list[int] = [2, 2, 1, 2, 2, 2, 1]
-    Minor: list[int] = [2, 1, 2, 2, 1, 2, 2]
+    MAJOR: list[int] = [2, 2, 1, 2, 2, 2, 1]
+    MINOR: list[int] = [2, 1, 2, 2, 1, 2, 2]
 
 
 def compute_scale(key: int, intervals: Intervals) -> list[int]:

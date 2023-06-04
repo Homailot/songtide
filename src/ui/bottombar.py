@@ -47,7 +47,7 @@ class BottomBar:
         )
         text_rect = pygame.Rect(10, 0, 80, 40)
         self.bpm_textbox = TextEntryWithCallback(
-            callback=lambda: self.process_bpm(),
+            callback=self.process_bpm,
             relative_rect=text_rect,
             manager=self.ui_manager,
             container=self.bpm_container,
