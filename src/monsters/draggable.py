@@ -70,7 +70,16 @@ class DraggableMonster:
                 self.stop_dragging()
             elif event.button == pygame.BUTTON_RIGHT:
                 for observer in self.observers:
-                    observer.on_right_click(self)
+                    mouse_position = pygame.mouse.get_pos()
+                    if (
+                        mouse_position[0] >= self.position[0]
+                        and mouse_position[0]
+                        <= self.position[0] + self.monster_image.get_width()
+                        and mouse_position[1] >= self.position[1]
+                        and mouse_position[1]
+                        <= self.position[1] + self.monster_image.get_height()
+                    ):
+                        observer.on_right_click(self)
 
     def update(self, delta_time: float):
         if self.dragging:

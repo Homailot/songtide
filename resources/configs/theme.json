@@ -47,6 +47,57 @@
             "italic": 0
         }
     },
+    "tool_tip.text_box": {
+        "colours": {
+            "dark_bg": "#14795A"
+        },
+        "misc": {
+            "border_width": "2",
+            "shadow_width": "0"
+        }
+    },
+    "vertical_scroll_bar": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "enable_arrow_buttons": "0",
+            "border_width": "0",
+            "shadow_width": "0",
+            "shape_corner_radius": "6"
+        }
+    },
+    "vertical_scroll_bar.#sliding_button": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "enable_arrow_buttons": "0",
+            "border_width": "0",
+            "shadow_width": "0",
+            "shape_corner_radius": "6"
+        }
+    },
+    "#parameter_container.label": {
+        "font": {
+            "name": "monogram",
+            "size": 32,
+            "bold": 0,
+            "italic": 0
+        },
+        "misc": {
+            "text_horiz_alignment": "left"
+        }
+    },
+    "#parameter_container.horizontal_slider": {
+        "misc": {
+            "enable_arrow_buttons": "0",
+            "shadow_width": "0",
+            "border_width": "2"
+        }
+    },
+    "#parameter_container.horizontal_slider.#sliding_button": {
+        "misc": {
+            "border_width": "0",
+            "shadow_width": "0"
+        }
+    },
     "#ethereal_button": {
         "images": {
             "normal_image": {

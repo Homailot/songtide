@@ -32,7 +32,7 @@ class UI:
             [{"name": "monogram", "point_size": 24, "style": "regular"}],
         )
         self.manager.preload_fonts(
-            [{"name": "monogram", "point_size": 16, "style": "regular"}],
+            [{"name": "monogram", "point_size": 20, "style": "regular"}],
         )
         self.manager.get_theme().load_theme("resources/configs/theme.json")
         monster_field.register_ui_observer(self)

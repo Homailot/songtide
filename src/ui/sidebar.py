@@ -3,11 +3,49 @@ from typing import Type
 
 import pygame
 import pygame_gui
+from pygame_gui.core import IContainerLikeInterface
 
 from src.commands import MonsterCommand
 from src.config import Configs
 from src.monsters import Monster
 from src.monsters.monsterinfo import MonsterInfo
+
+
+class Parameter:
+    def __init__(
+        self,
+        name: str,
+        value: float,
+        min: float,
+        max: float,
+        step: float,
+        container: IContainerLikeInterface,
+        top: int,
+        manager: pygame_gui.UIManager,
+    ):
+        self.name = name
+        self.value = value
+        self.min = min
+        self.max = max
+        self.step = step
+
+        self.label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(10, top, 250, 40),
+            text=name,
+            manager=manager,
+            container=container,
+            anchors={"left": "left", "top": "top"},
+        )
+
+        self.slider = pygame_gui.elements.UIHorizontalSlider(
+            relative_rect=pygame.Rect(10, top + 40, 220, 40),
+            start_value=value,
+            value_range=(min, max),
+            manager=manager,
+            container=container,
+            anchors={"left": "left", "top": "top"},
+            click_increment=step,
+        )
 
 
 class SideBar:
@@ -23,7 +61,7 @@ class SideBar:
         self.monster_info = monster_info
 
         self.sidebar = pygame_gui.elements.UIPanel(
-            relative_rect=pygame.Rect(-250, 0, 250, configs.screen_height),
+            relative_rect=pygame.Rect(-260, 0, 260, configs.screen_height),
             starting_height=2,
             manager=self.ui_manager,
             object_id="#sidebar",
@@ -43,7 +81,7 @@ class SideBar:
         )
 
         self.side_header = pygame_gui.elements.UIPanel(
-            relative_rect=pygame.Rect(0, 0, 250, 50),
+            relative_rect=pygame.Rect(0, 0, 260, 50),
             starting_height=0,
             manager=self.ui_manager,
             container=self.sidebar,
@@ -67,6 +105,15 @@ class SideBar:
             anchors={"left_target": self.side_header_return_arrow},
         )
 
+        self.parameters: list[Parameter] = []
+
+        self.parameter_container = pygame_gui.elements.UIScrollingContainer(
+            relative_rect=pygame.Rect(0, 50, 255, configs.screen_height - 50),
+            manager=self.ui_manager,
+            container=self.sidebar,
+            object_id="#parameter_container",
+        )
+
     def process_events(self, event: pygame.event.Event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == self.side_header_return_arrow:
@@ -77,7 +124,34 @@ class SideBar:
                     self.hide()
 
     def show(self, monster: Monster):
-        self.side_header_label.set_text(self.monster_info[type(monster)].name)
+        monster_info = self.monster_info[type(monster)]
+        configs = Configs()
+
+        self.side_header_label.set_text(monster_info.name)
+
+        for parameter in self.parameters:
+            parameter.label.kill()
+            parameter.slider.kill()
+
+        self.parameters = []
+
+        for parameter in monster.plugin_parameters:
+            self.parameters.append(
+                Parameter(
+                    parameter.name,
+                    parameter.value(),
+                    parameter.min,
+                    parameter.max,
+                    parameter.step,
+                    self.parameter_container,
+                    len(self.parameters) * 80,
+                    self.ui_manager,
+                )
+            )
+        self.parameter_container.set_scrollable_area_dimensions(
+            (230, max(len(self.parameters) * 80 + 50, configs.screen_height - 50))
+        )
+
         self.sidebar.show()
         self.overlay.show()
 

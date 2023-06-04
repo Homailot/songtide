@@ -77,20 +77,23 @@ class BottomBar(DraggableMonsterObserver):
         self.monster_info = monster_info
         left = 0
         for info in monster_info.values():
-            self.buttons.append(
-                pygame_gui.elements.UIButton(
-                    relative_rect=pygame.Rect(5 + left, 5, 60, 90),
-                    text="",
-                    manager=self.ui_manager,
-                    container=self.monster_container,
-                    object_id=info.button_id,
-                    tool_tip_text=f"<font face=monogram color=normal_text pixel_size=24>"
-                    f"{info.name}</font>"
-                    f"<font face=monogram color=normal_text pixel_size=16>{info.description}"
-                    "</font>",
-                    anchors={"left": "left", "top": "top"},
-                )
+            button = pygame_gui.elements.UIButton(
+                relative_rect=pygame.Rect(5 + left, 5, 60, 90),
+                text="",
+                manager=self.ui_manager,
+                container=self.monster_container,
+                object_id=info.button_id,
+                anchors={"left": "left", "top": "top"},
             )
+            button.set_tooltip(
+                text=f"<font face=monogram color=normal_text pixel_size=24>"
+                f"{info.name}</font>"
+                f"<font face=monogram color=normal_text pixel_size=20>{info.description}"
+                "</font>",
+                delay=0.0,
+                wrap_width=200,
+            )
+            self.buttons.append(button)
             left += 65
 
         self.draggableMonster = None
