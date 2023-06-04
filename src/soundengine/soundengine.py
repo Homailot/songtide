@@ -6,13 +6,14 @@ from src.clock import Clock
 from src.commands import ClockCommand, MonsterCommand
 from src.config import Configs
 from src.monsters import Monster
-from src.soundengine.sound import Sound
+from src.soundengine.sound import MonsterSoundEvent, Sound
 
 
 def start(
     stop_event: Event,
     monster_command_queue: "Queue[MonsterCommand]",
     clock_command_queue: "Queue[ClockCommand]",
+    monster_sound_queue: "Queue[MonsterSoundEvent]",
     bpm: float,
 ):
     configs = Configs()
@@ -40,7 +41,7 @@ def start(
     fs.program_select(0, sfid, 0, 32)
 
     monsters: dict[int, Monster] = {}
-    sounds: list[Sound] = []
+    sounds: list[tuple[int, Sound]] = []
 
     # monsters.append(EtherealEcho((0.5, 0.5)))
 
@@ -78,20 +79,22 @@ def start(
             # Generate next sound can take some time, so we get the current beat again so it is accurate
             current_beat = clock.tick()
 
-        sounds_to_remove: list[Sound] = []
+        sounds_to_remove: list[tuple[int, Sound]] = []
 
         for sound in sounds:
-            if sound.update(fs, current_beat):
+            if sound[1].update(fs, current_beat):
                 sounds_to_remove.append(sound)
+                monster_sound_queue.put(MonsterSoundEvent(sound[0], False))
 
         for sound in sounds_to_remove:
             sounds.remove(sound)
 
-        for monster in monsters.values():
+        for monster_id, monster in monsters.items():
             sound = monster.make_sound(current_beat)
             if sound is not None:
                 sound.play(fs)
-                sounds.append(sound)
+                sounds.append((monster_id, sound))
+                monster_sound_queue.put(MonsterSoundEvent(monster_id, True))
 
         if stop_event.is_set():
             break

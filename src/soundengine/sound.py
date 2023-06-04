@@ -1,6 +1,12 @@
 import fluidsynth
 
 
+class MonsterSoundEvent:
+    def __init__(self, monster_id: int, on: bool):
+        self.monster_id = monster_id
+        self.on = on
+
+
 class Sound:
     """A sound that can be played by the sound engine.
 

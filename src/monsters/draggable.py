@@ -10,13 +10,22 @@ class DraggableMonster:
         self,
         monster: Monster,
         monster_image: pygame.Surface,
+        monster_inactive_image: pygame.Surface,
         initial_position: tuple[int, int],
     ) -> None:
         self.monster = monster
         self.monster_image = monster_image
+        self.monster_inactive_image = monster_inactive_image
+        self.active_image = monster_inactive_image
         self.position = initial_position
         self.dragging = False
         self.observers = []
+
+    def set_active(self, active: bool):
+        if active:
+            self.active_image = self.monster_image
+        else:
+            self.active_image = self.monster_inactive_image
 
     def register_observer(self, observer):
         self.observers.append(observer)
@@ -28,11 +37,13 @@ class DraggableMonster:
         for observer in self.observers:
             observer.on_dragging_started(self)
         self.dragging = True
+        self.active_image = self.monster_image
 
     def stop_dragging(self):
         for observer in self.observers:
             observer.on_dragging_stopped(self)
         self.dragging = False
+        self.active_image = self.monster_inactive_image
 
     def process_events(self, event: pygame.event.Event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -60,7 +71,7 @@ class DraggableMonster:
             )
 
     def render(self, screen: pygame.Surface):
-        screen.blit(self.monster_image, self.position)
+        screen.blit(self.active_image, self.position)
 
 
 class DraggableMonsterObserver(ABC):

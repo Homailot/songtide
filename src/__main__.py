@@ -91,14 +91,21 @@ class Game:
         stop_event = Event()
         monster_command_queue = Queue()
         clock_command_queue = Queue()
+        monster_sound_queue = Queue()
 
         soundengine_process = Process(
             target=soundengine.start,
-            args=(stop_event, monster_command_queue, clock_command_queue, 80),
+            args=(
+                stop_event,
+                monster_command_queue,
+                clock_command_queue,
+                monster_sound_queue,
+                80,
+            ),
         )
         soundengine_process.start()
 
-        self.monster_field = MonsterField(monster_command_queue)
+        self.monster_field = MonsterField(monster_command_queue, monster_sound_queue)
         self.ui = UI(self.monster_field, clock_command_queue, self.monster_info)
 
         # monster = EtherealEcho((0.4, 0.5))
