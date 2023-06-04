@@ -106,7 +106,12 @@ class Game:
         soundengine_process.start()
 
         self.monster_field = MonsterField(monster_command_queue, monster_sound_queue)
-        self.ui = UI(self.monster_field, clock_command_queue, self.monster_info)
+        self.ui = UI(
+            self.monster_field,
+            clock_command_queue,
+            monster_command_queue,
+            self.monster_info,
+        )
 
         # monster = EtherealEcho((0.4, 0.5))
         # id = self.monster_repository.add_monster(monster)

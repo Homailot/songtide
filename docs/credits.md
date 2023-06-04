@@ -21,3 +21,4 @@
 ## Sprites
 
 [Earthbound Enemies](https://www.spriters-resource.com/snes/earthbound/sheet/3149/)
+[Icons](https://piiixl.itch.io/1-bit-icons-part-2)

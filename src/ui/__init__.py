@@ -9,6 +9,7 @@ from src.field import MonsterField
 from src.monsters import Monster
 from src.monsters.monsterinfo import MonsterInfo
 from src.ui.bottombar import BottomBar
+from src.ui.sidebar import SideBar
 
 
 class UI:
@@ -16,6 +17,7 @@ class UI:
         self,
         monster_field: MonsterField,
         clock_command_queue: Queue,
+        monster_command_queue: Queue,
         monster_info: dict[Type[Monster], MonsterInfo],
     ) -> None:
         configs = Configs()
@@ -37,6 +39,7 @@ class UI:
         self.bottom_bar = BottomBar(
             self.manager, monster_field, clock_command_queue, monster_info
         )
+        self.side_bar = SideBar(self.manager, monster_command_queue, monster_info)
 
     def process_events(self, event: pygame.event.Event):
         self.manager.process_events(event)

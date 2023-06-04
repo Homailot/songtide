@@ -54,6 +54,11 @@
             }
         }
     },
+    "#overlay": {
+        "colours": {
+            "dark_bg": "#00000025"
+        }
+    },
     "#bottom_bar": {
         "colours": {
             "normal_border": "#14795A"
@@ -79,6 +84,36 @@
         "misc": {
             "border_width": "2",
             "shadow_width": "0"
+        }
+    },
+    "#side_header_return_arrow": {
+        "colours": {
+            "normal_bg": "#3AA685"
+        },
+        "misc": {
+            "border_width": "0",
+            "shadow_width": "0"
+        },
+        "images": {
+            "normal_image": {
+                "path": "resources/sprites/arrow.png"
+            }
+        }
+    },
+    "#side_header": {
+        "colours": {
+            "dark_bg": "#3AA685"
+        }
+    },
+    "#side_header_label": {
+        "misc": {
+            "text_horiz_alignment": "left"
+        },
+        "font": {
+            "name": "monogram",
+            "size": 32,
+            "bold": 0,
+            "italic": 0
         }
     }
 }
