@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Type
 
 import pygame
 
@@ -8,18 +9,22 @@ from src.monsters import Monster
 class DraggableMonster:
     def __init__(
         self,
-        monster: Monster,
+        monster_type: Type[Monster],
         monster_image: pygame.Surface,
         monster_inactive_image: pygame.Surface,
         initial_position: tuple[int, int],
     ) -> None:
-        self.monster = monster
+        self.monster_type = monster_type
         self.monster_image = monster_image
         self.monster_inactive_image = monster_inactive_image
         self.active_image = monster_inactive_image
         self.position = initial_position
+        self.monster_id = -1
         self.dragging = False
         self.observers = []
+
+    def set_monster_id(self, monster_id: int):
+        self.monster_id = monster_id
 
     def set_active(self, active: bool):
         if active:

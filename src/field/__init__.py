@@ -2,17 +2,15 @@ from multiprocessing import Queue
 
 import pygame
 
-from src.commands import CreateMonsterCommand, MonsterCommand
+from src.commands import (
+    CreateMonsterCommand,
+    MonsterCommand,
+    UpdateMonsterPositionCommand,
+)
 from src.config import Configs
 from src.monsters.draggable import DraggableMonster
 from src.monsters.monsterrepository import MonsterRepository
 from src.soundengine.sound import MonsterSoundEvent
-
-
-class FieldDraggableMonster:
-    def __init__(self, draggable_monster: DraggableMonster, monster_id: int):
-        self.draggable_monster = draggable_monster
-        self.monster_id = monster_id
 
 
 class MonsterField:
@@ -51,15 +49,17 @@ class MonsterField:
             field_monster.render(screen)
 
     def add_monster(self, draggable_monster: DraggableMonster):
-        monster_id = self.monsters.add_monster(draggable_monster.monster)
+        monster = draggable_monster.monster_type(draggable_monster.position)
+        monster_id = self.monsters.add_monster(monster)
+        draggable_monster.set_monster_id(monster_id)
         self.draggable_monsters[monster_id] = draggable_monster
         self.monster_command_queue.put(
             CreateMonsterCommand(
                 monster_id,
-                type(draggable_monster.monster),
+                draggable_monster.monster_type,
                 (
                     draggable_monster.position[0] / self.width,
-                    draggable_monster.position[1] / self.height,
+                    1 - (draggable_monster.position[1] / self.height),
                 ),
             )
         )
@@ -70,4 +70,12 @@ class MonsterField:
         pass
 
     def on_dragging_stopped(self, draggable_monster: DraggableMonster):
-        pass
+        self.monster_command_queue.put(
+            UpdateMonsterPositionCommand(
+                draggable_monster.monster_id,
+                (
+                    draggable_monster.position[0] / self.width,
+                    1 - (draggable_monster.position[1] / self.height),
+                ),
+            )
+        )

@@ -114,7 +114,7 @@ class BottomBar(DraggableMonsterObserver):
         self, monster_type: Type[Monster], monster_info: MonsterInfo
     ):
         monster = DraggableMonster(
-            monster=monster_type((0, 0)),
+            monster_type=monster_type,
             monster_image=monster_info.image,
             monster_inactive_image=monster_info.inactive_image,
             initial_position=pygame.mouse.get_pos(),
