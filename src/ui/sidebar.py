@@ -5,7 +5,7 @@ import pygame
 import pygame_gui
 from pygame_gui.core import IContainerLikeInterface
 
-from src.commands import MonsterCommand
+from src.commands import MonsterCommand, UpdateMonsterMutedCommand
 from src.config import Configs
 from src.monsters import Monster
 from src.monsters.monsterinfo import MonsterInfo
@@ -59,6 +59,8 @@ class SideBar:
         self.ui_manager = ui_manager
         self.monster_command_queue = monster_command_queue
         self.monster_info = monster_info
+        self.current_monster: Monster = None
+        self.current_monster_id: int = None
 
         self.sidebar = pygame_gui.elements.UIPanel(
             relative_rect=pygame.Rect(-260, 0, 260, configs.screen_height),
@@ -141,6 +143,15 @@ class SideBar:
             anchors={"left": "left", "top": "top"},
         )
 
+        self.unmute_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(210, 100, 50, 50),
+            text="",
+            manager=self.ui_manager,
+            container=self.sidebar,
+            object_id="#unmute_button",
+            anchors={"left": "left", "top": "top"},
+            visible=False,
+        )
 
         self.parameters: list[Parameter] = []
 
@@ -155,14 +166,48 @@ class SideBar:
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == self.side_header_return_arrow:
                 self.hide()
+            elif event.ui_element == self.mute_button:
+                self.monster_command_queue.put(
+                    UpdateMonsterMutedCommand(
+                        self.current_monster_id,
+                        True,
+                    )
+                )
+                self.current_monster.mute()
+                self.show_unmute()
+            elif event.ui_element == self.unmute_button:
+                self.monster_command_queue.put(
+                    UpdateMonsterMutedCommand(
+                        self.current_monster_id,
+                        False,
+                    )
+                )
+                self.current_monster.unmute()
+                self.show_mute()
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 if not self.sidebar.get_abs_rect().collidepoint(event.pos):
                     self.hide()
 
-    def show(self, monster: Monster):
+    def show_mute(self):
+        self.mute_label.set_text("Mute")
+        self.unmute_button.hide()
+        self.unmute_button.set_dimensions((0, 0))
+        self.mute_button.show()
+        self.mute_button.set_dimensions((50, 50))
+
+    def show_unmute(self):
+        self.mute_label.set_text("Unmute")
+        self.mute_button.hide()
+        self.mute_button.set_dimensions((0, 0))
+        self.unmute_button.show()
+        self.unmute_button.set_dimensions((50, 50))
+
+    def show(self, monster: Monster, monster_id: int):
         monster_info = self.monster_info[type(monster)]
         configs = Configs()
+        self.current_monster = monster
+        self.current_monster_id = monster_id
 
         self.side_header_label.set_text(monster_info.name)
 
@@ -188,6 +233,11 @@ class SideBar:
         self.parameter_container.set_scrollable_area_dimensions(
             (230, max(len(self.parameters) * 80 + 50, configs.screen_height - 50))
         )
+
+        if monster.muted:
+            self.show_unmute()
+        else:
+            self.show_mute()
 
         self.sidebar.show()
         self.overlay.show()

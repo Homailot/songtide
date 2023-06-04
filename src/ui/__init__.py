@@ -55,5 +55,5 @@ class UI:
         self.manager.draw_ui(screen)
         self.bottom_bar.render(screen)
 
-    def on_monster_right_click(self, monster: Monster):
-        self.side_bar.show(monster)
+    def on_monster_right_click(self, monster: Monster, monster_id: int):
+        self.side_bar.show(monster, monster_id)

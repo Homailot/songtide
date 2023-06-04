@@ -119,6 +119,13 @@
             }
         }
     },
+    "#unmute_button": {
+        "images": {
+            "normal_image": {
+                "path": "resources/sprites/unmute.png"
+            }
+        }
+    },
     "#parameter_container.horizontal_slider": {
         "misc": {
             "shape": "rounded_rectangle",

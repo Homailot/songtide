@@ -92,5 +92,6 @@ class MonsterField:
     def on_right_click(self, draggable_monster: DraggableMonster):
         if self.ui_observer:
             self.ui_observer.on_monster_right_click(
-                self.monsters.get_monster(draggable_monster.monster_id)
+                self.monsters.get_monster(draggable_monster.monster_id),
+                draggable_monster.monster_id,
             )
