@@ -42,6 +42,7 @@ class Monster(ABC):
     """
 
     next_sound: Sound | None = None
+    initialized: bool = False
     plugins: list[MonsterPlugin] = []
     plugin_parameters: list[PluginParameter] = []
     last_beat: float = 0.0
@@ -63,6 +64,12 @@ class Monster(ABC):
             The new position of the monster.
         """
         pass
+
+    def initialize(self, current_beat: float):
+        if not self.initialized:
+            self.last_beat = int(current_beat + 1)
+
+            self.initialized = True
 
     def add_plugin(self, plugin: MonsterPlugin):
         """Adds a plugin to the monster.

@@ -96,6 +96,4 @@ class EtherealEcho(Monster):
     def generate_next_sound_internal(
         self, next_beat: float, note: int, duration: float, rest: float
     ) -> Sound:
-        return Sound(
-            0, note + self.starting_value, self.velocity, next_beat + 0.05, duration
-        )
+        return Sound(0, note + self.starting_value, self.velocity, next_beat, duration)

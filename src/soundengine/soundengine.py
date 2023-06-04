@@ -46,9 +46,15 @@ def start(
 
     clock = Clock(bpm)
     while True:
+        current_beat = clock.tick()
+
         while not monster_command_queue.empty():
             command = monster_command_queue.get()
             command.execute(monsters)
+
+            if command.id in monsters:
+                monster = monsters[command.id]
+                monster.initialize(current_beat)
 
         while not clock_command_queue.empty():
             command = clock_command_queue.get()

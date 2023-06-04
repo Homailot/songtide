@@ -12,7 +12,11 @@ class MonsterCommand(ABC):
     """
 
     @abstractmethod
-    def execute(self, monster_dict: dict[int, Monster]):
+    def __init__(self, id: int):
+        self.id = id
+
+    @abstractmethod
+    def execute(self, monster_dict: dict[int, Monster]) -> Monster:
         pass
 
 
@@ -26,11 +30,14 @@ class CreateMonsterCommand(MonsterCommand):
     """
 
     def __init__(self, id: int, monster_type: Type[Monster], position: tuple[int, int]):
-        self.id = id
+        super().__init__(id)
         self.monster_type = monster_type
         self.position = position
 
     def execute(self, monster_dict: dict[int, Monster]):
+        print(
+            f"Creating monster {self.id} of type {self.monster_type} at position {self.position}"
+        )
         monster_dict[self.id] = self.monster_type(self.position)
 
 
@@ -44,7 +51,7 @@ class DeleteMonsterCommand(MonsterCommand):
     """
 
     def __init__(self, id: int):
-        self.id = id
+        super().__init__(id)
 
     def execute(self, monster_dict: dict[int, Monster]):
         del monster_dict[self.id]
@@ -62,7 +69,7 @@ class UpdateMonsterPositionCommand(MonsterCommand):
     """
 
     def __init__(self, id: int, position: tuple[int, int]):
-        self.id = id
+        super().__init__(id)
         self.position = position
 
     def execute(self, monster_dict: dict[int, Monster]):
@@ -81,7 +88,7 @@ class UpdateMonsterMutedCommand(MonsterCommand):
     """
 
     def __init__(self, id: int, muted: bool):
-        self.id = id
+        super().__init__(id)
         self.muted = muted
 
     def execute(self, monster_dict: dict[int, Monster]):
@@ -102,7 +109,7 @@ class UpdateMonsterPluginParameterCommand(MonsterCommand):
     """
 
     def __init__(self, id: int, parameter_index: int, value: float):
-        self.id = id
+        super().__init__(id)
         self.parameter_index = parameter_index
         self.value = value
 

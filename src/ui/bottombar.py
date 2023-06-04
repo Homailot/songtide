@@ -6,16 +6,18 @@ import pygame_gui
 
 from src.commands import UpdateClockBpmCommand
 from src.config import Configs
+from src.field import MonsterField
 from src.monsters import Monster
+from src.monsters.draggable import DraggableMonster, DraggableMonsterObserver
 from src.monsters.monsterinfo import MonsterInfo
 from src.ui.components import TextEntryWithCallback
-from src.ui.components.draggable import DraggableMonster, DraggableMonsterObserver
 
 
 class BottomBar(DraggableMonsterObserver):
     def __init__(
         self,
         ui_manager: pygame_gui.UIManager,
+        monster_field: MonsterField,
         clock_command_queue: Queue,
         monster_info: dict[Type[Monster], MonsterInfo],
     ):
@@ -23,6 +25,7 @@ class BottomBar(DraggableMonsterObserver):
 
         self.ui_manager = ui_manager
         self.clock_command_queue = clock_command_queue
+        self.monster_field = monster_field
 
         rect = pygame.Rect(0, 0, configs.screen_width + 4, 100)
         rect.bottomleft = (-2, 2)
@@ -131,8 +134,9 @@ class BottomBar(DraggableMonsterObserver):
         pass
 
     def on_dragging_stopped(self, monster: DraggableMonster):
+        monster.unregister_observer(self)
+        self.monster_field.add_monster(monster)
         self.draggableMonster = None
-        # TODO: ADD MONSTER TO FIELD
         pass
 
     def process_bpm(self):

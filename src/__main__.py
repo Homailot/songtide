@@ -8,6 +8,7 @@ import pygame_gui
 
 from src.commands import CreateMonsterCommand
 from src.config import Configs
+from src.field import MonsterField
 from src.monsters import Monster
 from src.monsters.fractalmonster import EtherealEcho
 from src.monsters.monsterinfo import MonsterInfo
@@ -31,7 +32,6 @@ class Game:
         self.clock = pygame.time.Clock()
         self.delta_time = 0
         self.lag = 0.0
-        self.monster_repository = MonsterRepository()
         self.state = GameState.RUNNING
 
         self.monster_info: dict[Type[Monster], MonsterInfo] = {}
@@ -41,16 +41,19 @@ class Game:
             if event.type == pygame.QUIT:
                 self.state = GameState.STOPPED
 
+            self.monster_field.process_events(event)
             self.ui.process_events(event)
 
     def render(self, screen: pygame.Surface):
         screen.fill("#5BC4A4")
+        self.monster_field.render(screen)
         self.ui.render(screen)
 
         pygame.display.flip()
 
     def update(self):
         self.ui.update(self.delta_time)
+        self.monster_field.update(self.delta_time)
 
     def handle_run(self, screen: pygame.Surface):
         self.process_events()
@@ -95,7 +98,8 @@ class Game:
         )
         soundengine_process.start()
 
-        self.ui = UI(clock_command_queue, self.monster_info)
+        self.monster_field = MonsterField(monster_command_queue)
+        self.ui = UI(self.monster_field, clock_command_queue, self.monster_info)
 
         # monster = EtherealEcho((0.4, 0.5))
         # id = self.monster_repository.add_monster(monster)

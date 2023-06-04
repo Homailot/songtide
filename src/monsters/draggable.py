@@ -21,6 +21,9 @@ class DraggableMonster:
     def register_observer(self, observer):
         self.observers.append(observer)
 
+    def unregister_observer(self, observer):
+        self.observers.remove(observer)
+
     def start_dragging(self):
         for observer in self.observers:
             observer.on_dragging_started(self)
