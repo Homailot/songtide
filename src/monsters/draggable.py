@@ -19,9 +19,10 @@ class DraggableMonster:
         self.monster_inactive_image = monster_inactive_image
         self.active_image = monster_inactive_image
         self.position = initial_position
+        self.drag_start_position = initial_position
         self.monster_id = -1
         self.dragging = False
-        self.observers = []
+        self.observers: list[DraggableMonsterObserver] = []
 
     def set_monster_id(self, monster_id: int):
         self.monster_id = monster_id
@@ -43,6 +44,7 @@ class DraggableMonster:
             observer.on_dragging_started(self)
         self.dragging = True
         self.active_image = self.monster_image
+        self.drag_start_position = self.position
 
     def stop_dragging(self):
         for observer in self.observers:
@@ -66,6 +68,9 @@ class DraggableMonster:
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == pygame.BUTTON_LEFT:
                 self.stop_dragging()
+            elif event.button == pygame.BUTTON_RIGHT:
+                for observer in self.observers:
+                    observer.on_right_click(self)
 
     def update(self, delta_time: float):
         if self.dragging:
@@ -86,4 +91,7 @@ class DraggableMonsterObserver(ABC):
 
     @abstractmethod
     def on_dragging_stopped(self, draggable_monster: DraggableMonster):
+        pass
+
+    def on_right_click(self, draggable_monster: DraggableMonster):
         pass

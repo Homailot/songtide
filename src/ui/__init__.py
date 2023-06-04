@@ -35,6 +35,7 @@ class UI:
             [{"name": "monogram", "point_size": 16, "style": "regular"}],
         )
         self.manager.get_theme().load_theme("resources/configs/theme.json")
+        monster_field.register_ui_observer(self)
 
         self.bottom_bar = BottomBar(
             self.manager, monster_field, clock_command_queue, monster_info
@@ -44,6 +45,7 @@ class UI:
     def process_events(self, event: pygame.event.Event):
         self.manager.process_events(event)
         self.bottom_bar.process_events(event)
+        self.side_bar.process_events(event)
 
     def update(self, delta_time: float):
         self.manager.update(delta_time / 1000)
@@ -52,3 +54,6 @@ class UI:
     def render(self, screen: pygame.Surface):
         self.manager.draw_ui(screen)
         self.bottom_bar.render(screen)
+
+    def on_monster_right_click(self, monster: Monster):
+        self.side_bar.show(monster)

@@ -29,6 +29,11 @@ class MonsterField:
         self.width = configs.screen_width
         self.height = configs.screen_height - 100
 
+        self.ui_observer = None
+
+    def register_ui_observer(self, ui_observer):
+        self.ui_observer = ui_observer
+
     def process_events(self, event: pygame.event.Event):
         for field_monster in self.draggable_monsters.values():
             field_monster.process_events(event)
@@ -70,6 +75,10 @@ class MonsterField:
         pass
 
     def on_dragging_stopped(self, draggable_monster: DraggableMonster):
+        if draggable_monster.position[1] > self.height:
+            draggable_monster.position = draggable_monster.drag_start_position
+            return
+
         self.monster_command_queue.put(
             UpdateMonsterPositionCommand(
                 draggable_monster.monster_id,
@@ -79,3 +88,9 @@ class MonsterField:
                 ),
             )
         )
+
+    def on_right_click(self, draggable_monster: DraggableMonster):
+        if self.ui_observer:
+            self.ui_observer.on_monster_right_click(
+                self.monsters.get_monster(draggable_monster.monster_id)
+            )

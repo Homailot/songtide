@@ -97,7 +97,8 @@ class BottomBar(DraggableMonsterObserver):
 
     def process_events(self, event: pygame.event.Event):
         if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
-            self.bpm_textbox.callback()
+            if event.ui_element == self.bpm_textbox:
+                self.bpm_textbox.callback()
         elif event.type == pygame_gui.UI_BUTTON_START_PRESS:
             for idx, button in enumerate(self.buttons):
                 if button == event.ui_element:
@@ -135,6 +136,10 @@ class BottomBar(DraggableMonsterObserver):
         pass
 
     def on_dragging_stopped(self, monster: DraggableMonster):
+        if self.bottom_bar.get_abs_rect().collidepoint(monster.position):
+            self.draggableMonster = None
+            return
+
         monster.unregister_observer(self)
         self.monster_field.add_monster(monster)
         self.draggableMonster = None
