@@ -34,15 +34,7 @@ class Game:
         self.monster_repository = MonsterRepository()
         self.state = GameState.RUNNING
 
-        self.monster_info: dict[Type[Monster], MonsterInfo] = {
-            EtherealEcho: MonsterInfo(
-            "Ethereal Echo", 
-            "Mesmerizing creature that embodies the essence of music.<br>"
-            "Its translucent body shimmers with delicate hues, "
-            "reflecting the colors of the harmonies it creates",
-            "#ethereal_button"
-            )
-        }
+        self.monster_info: dict[Type[Monster], MonsterInfo] = {}
 
     def process_events(self):
         for event in pygame.event.get():
@@ -75,6 +67,19 @@ class Game:
         pygame.init()
         screen = pygame.display.set_mode((configs.screen_width, configs.screen_height))
         pygame.display.set_caption("Songtide")
+
+        ethereal_echo_image = pygame.image.load(
+            "resources/sprites/EtherealEcho.png"
+        ).convert_alpha()
+
+        self.monster_info[EtherealEcho] = MonsterInfo(
+            "Ethereal Echo",
+            "Mesmerizing creature that embodies the essence of music.<br>"
+            "Its translucent body shimmers with delicate hues, "
+            "reflecting the colors of the harmonies it creates",
+            "#ethereal_button",
+            ethereal_echo_image,
+        )
 
         self.manager = pygame_gui.UIManager(
             (configs.screen_width, configs.screen_height)

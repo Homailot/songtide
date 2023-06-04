@@ -136,7 +136,7 @@ class Monster(ABC):
             sound = self.next_sound
             self.next_sound = None
             return sound
-        
+
         if self.muted and current_beat >= self.next_sound.init:
             self.next_sound = None
 

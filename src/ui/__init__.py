@@ -40,6 +40,8 @@ class UI:
 
     def update(self, delta_time: float):
         self.manager.update(delta_time / 1000)
+        self.bottom_bar.update(delta_time)
 
     def render(self, screen: pygame.Surface):
         self.manager.draw_ui(screen)
+        self.bottom_bar.render(screen)

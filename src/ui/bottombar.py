@@ -9,9 +9,10 @@ from src.config import Configs
 from src.monsters import Monster
 from src.monsters.monsterinfo import MonsterInfo
 from src.ui.components import TextEntryWithCallback
+from src.ui.components.draggable import DraggableMonster, DraggableMonsterObserver
 
 
-class BottomBar:
+class BottomBar(DraggableMonsterObserver):
     def __init__(
         self,
         ui_manager: pygame_gui.UIManager,
@@ -69,25 +70,70 @@ class BottomBar:
             anchors={"left_target": self.bpm_container},
         )
 
+        self.buttons: list[pygame_gui.elements.UIButton] = []
+        self.monster_info = monster_info
         left = 0
-        for monster_type, info in monster_info.items():
-            monster_button = pygame_gui.elements.UIButton(
-                relative_rect=pygame.Rect(5 + left, 5, 60, 90),
-                text="",
-                manager=self.ui_manager,
-                container=self.monster_container,
-                object_id=info.image,
-                tool_tip_text=f"<font face=monogram color=normal_text pixel_size=24>"
-                f"{info.name}</font>"
-                f"<font face=monogram color=normal_text pixel_size=16>{info.description}"
-                "</font>",
-                anchors={"left": "left", "top": "top"},
+        for info in monster_info.values():
+            self.buttons.append(
+                pygame_gui.elements.UIButton(
+                    relative_rect=pygame.Rect(5 + left, 5, 60, 90),
+                    text="",
+                    manager=self.ui_manager,
+                    container=self.monster_container,
+                    object_id=info.button_id,
+                    tool_tip_text=f"<font face=monogram color=normal_text pixel_size=24>"
+                    f"{info.name}</font>"
+                    f"<font face=monogram color=normal_text pixel_size=16>{info.description}"
+                    "</font>",
+                    anchors={"left": "left", "top": "top"},
+                )
             )
             left += 65
+
+        self.draggableMonster = None
 
     def process_events(self, event: pygame.event.Event):
         if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
             self.bpm_textbox.callback()
+        elif event.type == pygame_gui.UI_BUTTON_START_PRESS:
+            for idx, button in enumerate(self.buttons):
+                if button == event.ui_element:
+                    self.process_monster_click(
+                        list(self.monster_info.keys())[idx],
+                        list(self.monster_info.values())[idx],
+                    )
+                    break
+
+        if self.draggableMonster:
+            self.draggableMonster.process_events(event)
+
+    def process_monster_click(
+        self, monster_type: Type[Monster], monster_info: MonsterInfo
+    ):
+        monster = DraggableMonster(
+            monster=monster_type((0, 0)),
+            monster_image=monster_info.image,
+            initial_position=pygame.mouse.get_pos(),
+        )
+        monster.start_dragging()
+        monster.register_observer(self)
+        self.draggableMonster = monster
+
+    def update(self, dt: float):
+        if self.draggableMonster:
+            self.draggableMonster.update(dt)
+
+    def render(self, surface: pygame.Surface):
+        if self.draggableMonster:
+            self.draggableMonster.render(surface)
+
+    def on_dragging_started(self, monster: DraggableMonster):
+        pass
+
+    def on_dragging_stopped(self, monster: DraggableMonster):
+        self.draggableMonster = None
+        # TODO: ADD MONSTER TO FIELD
+        pass
 
     def process_bpm(self):
         bpm = self.bpm_textbox.get_text()
