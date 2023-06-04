@@ -30,7 +30,7 @@ class Parameter:
         self.step = step
 
         self.label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect(10, top, 250, 40),
+            relative_rect=pygame.Rect(15, top, 250, 40),
             text=name,
             manager=manager,
             container=container,
@@ -38,7 +38,7 @@ class Parameter:
         )
 
         self.slider = pygame_gui.elements.UIHorizontalSlider(
-            relative_rect=pygame.Rect(10, top + 40, 220, 40),
+            relative_rect=pygame.Rect(15, top + 40, 210, 40),
             start_value=value,
             value_range=(min, max),
             manager=manager,
@@ -105,10 +105,47 @@ class SideBar:
             anchors={"left_target": self.side_header_return_arrow},
         )
 
+        self.remove_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(15, 50, 200, 50),
+            text="Remove",
+            manager=self.ui_manager,
+            container=self.sidebar,
+            object_id="#remove_label",
+            anchors={"left": "left", "top": "top"},
+        )
+
+        self.remove_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(210, 50, 50, 50),
+            text="",
+            manager=self.ui_manager,
+            container=self.sidebar,
+            object_id="#remove_button",
+            anchors={"left": "left", "top": "top"},
+        )
+
+        self.mute_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(15, 100, 200, 50),
+            text="Mute",
+            manager=self.ui_manager,
+            container=self.sidebar,
+            object_id="#mute_label",
+            anchors={"left": "left", "top": "top"},
+        )
+
+        self.mute_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(210, 100, 50, 50),
+            text="",
+            manager=self.ui_manager,
+            container=self.sidebar,
+            object_id="#mute_button",
+            anchors={"left": "left", "top": "top"},
+        )
+
+
         self.parameters: list[Parameter] = []
 
         self.parameter_container = pygame_gui.elements.UIScrollingContainer(
-            relative_rect=pygame.Rect(0, 50, 255, configs.screen_height - 50),
+            relative_rect=pygame.Rect(0, 150, 255, configs.screen_height - 50),
             manager=self.ui_manager,
             container=self.sidebar,
             object_id="#parameter_container",
