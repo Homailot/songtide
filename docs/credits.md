@@ -13,3 +13,11 @@
 ## PyFluidSynth
 
 [PyFluidSynth](https://github.com/nwhitehead/pyfluidsynth)
+
+## Fonts
+
+[Monogram](https://datagoblin.itch.io/monogram)
+
+## Sprites
+
+[Earthbound Enemies](https://www.spriters-resource.com/snes/earthbound/sheet/3149/)

@@ -1,12 +1,14 @@
 import sys
 from enum import Enum
 from multiprocessing import Event, Process, Queue
+from typing import Type
 
 import pygame
 import pygame_gui
 
 from src.commands import CreateMonsterCommand
 from src.config import Configs
+from src.monsters import Monster
 from src.monsters.fractalmonster import EtherealEcho
 from src.monsters.monsterrepository import MonsterRepository
 from src.soundengine import soundengine
@@ -77,14 +79,16 @@ class Game:
         )
         soundengine_process.start()
 
-        self.ui = UI(clock_command_queue)
+        self.monster_images: dict[Type[Monster], str] = {
+            EtherealEcho: "#ethereal_button"
+        }
 
-        monster = EtherealEcho((0.4, 0.5))
-        id = self.monster_repository.add_monster(monster)
-        create_monster_command = CreateMonsterCommand(id, type(monster), (0.4, 0.5))
-        monster_command_queue.put(create_monster_command)
+        self.ui = UI(clock_command_queue, self.monster_images)
 
-        # clock_command_queue.put(UpdateClockBpmCommand(40))
+        # monster = EtherealEcho((0.4, 0.5))
+        # id = self.monster_repository.add_monster(monster)
+        # create_monster_command = CreateMonsterCommand(id, type(monster), (0.4, 0.5))
+        # monster_command_queue.put(create_monster_command)
 
         running = True
         while running:

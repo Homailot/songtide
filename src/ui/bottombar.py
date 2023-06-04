@@ -1,18 +1,26 @@
 from multiprocessing import Queue
+from typing import Type
 
 import pygame
 import pygame_gui
 
 from src.commands import UpdateClockBpmCommand
 from src.config import Configs
+from src.monsters import Monster
 from src.ui.components import TextEntryWithCallback
 
 
 class BottomBar:
-    def __init__(self, ui_manager: pygame_gui.UIManager, clock_command_queue: Queue):
+    def __init__(
+        self,
+        ui_manager: pygame_gui.UIManager,
+        clock_command_queue: Queue,
+        monster_images: dict[Type[Monster], pygame.Surface],
+    ):
         configs = Configs()
 
         self.ui_manager = ui_manager
+        self.clock_command_queue = clock_command_queue
 
         rect = pygame.Rect(0, 0, configs.screen_width + 4, 100)
         rect.bottomleft = (-2, 2)
@@ -50,7 +58,27 @@ class BottomBar:
         self.bpm_textbox.set_allowed_characters(
             ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
         )
-        self.clock_command_queue = clock_command_queue
+
+        self.monster_container = pygame_gui.elements.UIPanel(
+            relative_rect=pygame.Rect(0, 0, configs.screen_width - 100, 100),
+            starting_height=0,
+            manager=self.ui_manager,
+            container=self.bottom_bar,
+            object_id="#monster_container",
+            anchors={"left_target": self.bpm_container},
+        )
+
+        left = 0
+        for monster_type, image in monster_images.items():
+            monster_button = pygame_gui.elements.UIButton(
+                relative_rect=pygame.Rect(5 + left, 5, 60, 90),
+                text="",
+                manager=self.ui_manager,
+                container=self.monster_container,
+                object_id=image,
+                anchors={"left": "left", "top": "top"},
+            )
+            left += 65
 
     def process_events(self, event: pygame.event.Event):
         if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:

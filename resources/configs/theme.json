@@ -3,8 +3,19 @@
         "colours": {
             "dark_bg": "#259372",
             "hovered_bg": "#14795A",
+            "selected_bg": "#075A41",
+            "active_bg": "#075A41",
             "normal_text": "#FFd6b6",
-            "normal_border": "#075A41"
+            "normal_border": "#14795A",
+            "hovered_border": "#14795A",
+            "selected_border": "#14795A",
+            "active_border": "#14795A"
+        },
+        "font": {
+            "name": "monogram",
+            "size": 32,
+            "bold": 0,
+            "italic": 0
         }
     },
     "#bpm_label": {
@@ -15,22 +26,42 @@
             "italic": 0
         }
     },
-    "#bottom_bar": {
-        "colours": {
-            "normal_border": "#14795A"
-        },
+    "panel": {
         "misc": {
             "border_width": "0",
             "shadow_width": "0"
         }
     },
+    "button": {
+        "colours": {
+            "normal_bg": "#3AA685"
+        },
+        "misc": {
+            "border_width": "2",
+            "shadow_width": "0"
+        },
+        "font": {
+            "name": "monogram",
+            "size": 32,
+            "bold": 0,
+            "italic": 0
+        }
+    },
+    "#ethereal_button": {
+        "images": {
+            "normal_image": {
+                "path": "resources/sprites/EtherealEcho.png"
+            }
+        }
+    },
+    "#bottom_bar": {
+        "colours": {
+            "normal_border": "#14795A"
+        }
+    },
     "#bpm_container": {
         "colours": {
             "normal_border": "#259372"
-        },
-        "misc": {
-            "border_width": "0",
-            "shadow_width": "0"
         }
     },
     "#bpm_textbox": {

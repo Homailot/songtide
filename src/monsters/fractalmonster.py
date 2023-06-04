@@ -44,7 +44,7 @@ class EtherealEcho(Monster):
                 self.fractal_duration_plugin.get_starting_duration,
                 0.5,
                 3,
-                lambda value: self.fractal_duration_plugin.set_starting_duration(value),
+                self.fractal_duration_plugin.set_starting_duration,
                 0.25,
             ),
             PluginParameter(
@@ -52,7 +52,7 @@ class EtherealEcho(Monster):
                 self.fractal_duration_plugin.get_max_duration,
                 2,
                 5,
-                lambda value: self.fractal_duration_plugin.set_max_duration(value),
+                self.fractal_duration_plugin.set_max_duration,
                 1,
             ),
             PluginParameter(
@@ -60,15 +60,15 @@ class EtherealEcho(Monster):
                 self.constant_rest_plugin.get_rest,
                 0,
                 2,
-                lambda value: self.constant_rest_plugin.set_rest(value),
+                self.constant_rest_plugin.set_rest,
                 0.25,
             ),
             PluginParameter(
-                "Emotion",
+                "Vehemence",
                 self.octave_plugin.get_intervals,
                 0,
                 1,
-                lambda value: self.octave_plugin.set_intervals(value),
+                self.octave_plugin.set_intervals,
                 1,
             ),
             PluginParameter(
@@ -76,7 +76,7 @@ class EtherealEcho(Monster):
                 self.octave_plugin.get_num_octaves,
                 1,
                 3,
-                lambda value: self.octave_plugin.set_num_octaves(value),
+                self.octave_plugin.set_num_octaves,
                 1,
             ),
         ]
