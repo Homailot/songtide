@@ -5,8 +5,9 @@ import pygame
 import pygame_gui
 from pygame_gui.core import IContainerLikeInterface
 
-from src.commands import MonsterCommand, UpdateMonsterMutedCommand
+from src.commands import DeleteMonsterCommand, MonsterCommand, UpdateMonsterMutedCommand
 from src.config import Configs
+from src.field import MonsterField
 from src.monsters import Monster
 from src.monsters.monsterinfo import MonsterInfo
 
@@ -54,17 +55,16 @@ class Parameter:
     def process_events(self, event: pygame.event.Event):
         if event.type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED:
             if event.ui_element == self.slider:
-                print(self.name, event.value)
                 # enforce step
                 self.value = round(event.value / self.step) * self.step
                 self.slider.set_current_value(self.value)
-                print(self.name, self.value, " step")
 
 
 class SideBar:
     def __init__(
         self,
         ui_manager: pygame_gui.UIManager,
+        monster_field: MonsterField,
         monster_command_queue: "Queue[MonsterCommand]",
         monster_info: dict[Type[Monster], MonsterInfo],
     ):
@@ -74,6 +74,7 @@ class SideBar:
         self.monster_info = monster_info
         self.current_monster: Monster = None
         self.current_monster_id: int = None
+        self.monster_field = monster_field
 
         self.sidebar = pygame_gui.elements.UIPanel(
             relative_rect=pygame.Rect(-260, 0, 260, configs.screen_height),
@@ -197,6 +198,12 @@ class SideBar:
                 )
                 self.current_monster.unmute()
                 self.show_mute()
+            elif event.ui_element == self.remove_button:
+                self.monster_command_queue.put(
+                    DeleteMonsterCommand(self.current_monster_id)
+                )
+                self.monster_field.remove_monster(self.current_monster_id)
+                self.hide()
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 if not self.sidebar.get_abs_rect().collidepoint(event.pos):

@@ -40,7 +40,9 @@ class UI:
         self.bottom_bar = BottomBar(
             self.manager, monster_field, clock_command_queue, monster_info
         )
-        self.side_bar = SideBar(self.manager, monster_command_queue, monster_info)
+        self.side_bar = SideBar(
+            self.manager, monster_field, monster_command_queue, monster_info
+        )
 
     def process_events(self, event: pygame.event.Event):
         self.manager.process_events(event)

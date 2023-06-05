@@ -71,6 +71,11 @@ class MonsterField:
         print("Added monster", monster_id)
         draggable_monster.register_observer(self)
 
+    def remove_monster(self, monster_id: int):
+        self.monsters.remove_monster(monster_id)
+        self.draggable_monsters[monster_id].unregister_observer(self)
+        del self.draggable_monsters[monster_id]
+
     def on_dragging_started(self, draggable_monster: DraggableMonster):
         pass
 

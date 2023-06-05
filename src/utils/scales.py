@@ -1,14 +1,13 @@
 from enum import Enum
 
-
 intervals = [
-    [2, 2, 1, 2, 2, 2], # major
-    [2, 2, 2, 2, 2], # whole tone
-    [2, 2, 3, 2], # pentatonic
-    [3, 2, 1, 1, 3], # blues
-    [2, 1, 2, 2, 1, 2], # minor
-    [1, 2, 1, 2, 1, 2, 1], # diminished
-    [1, 2, 2, 2, 1, 2], # phrygian
+    [2, 2, 1, 2, 2, 2],  # major
+    [2, 2, 2, 2, 2],  # whole tone
+    [2, 2, 3, 2],  # pentatonic
+    [3, 2, 1, 1, 3],  # blues
+    [2, 1, 2, 2, 1, 2],  # minor
+    [1, 2, 1, 2, 1, 2, 1],  # diminished
+    [1, 2, 2, 2, 1, 2],  # phrygian
 ]
 
 
@@ -29,7 +28,7 @@ def compute_scale(key: int, intervals: list[int]) -> list[int]:
         The scale.
     """
     scale = [key]
-    
+
     for interval in intervals:
         scale.append(scale[-1] + interval)
 

@@ -1,6 +1,7 @@
 from src.plugins import MonsterPlugin
 from src.utils import octaver
-from src.utils.scales import compute_scale, intervals as Intervals
+from src.utils.scales import compute_scale
+from src.utils.scales import intervals as Intervals
 
 
 class OctavePlugin(MonsterPlugin):
