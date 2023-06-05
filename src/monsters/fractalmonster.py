@@ -21,8 +21,9 @@ class EtherealEcho(Monster):
     def __init__(
         self,
         position: tuple[float, float],
+        channel: int = 0,
     ):
-        super().__init__(position, 0)
+        super().__init__(position, channel)
         self.starting_value = int(position[0] * 80) + 20
         self.velocity = int(position[1] * 80) + 20
 
@@ -104,7 +105,29 @@ class EtherealEcho(Monster):
     def generate_next_sound_internal(
         self, next_beat: float, note: int, duration: float, rest: float
     ) -> Sound:
-        return Sound(0, note + self.starting_value, self.velocity, next_beat, duration)
+        return Sound(
+            self.channel, note + self.starting_value, self.velocity, next_beat, duration
+        )
+
+
+class DarkEcho(EtherealEcho):
+    """Monster that generates long, scary notes.
+
+    Attributes
+    ----------
+    starting_value : int
+        The starting value for the sequence. It is a MIDI note,
+        and is calculated based on the horizontal position of the monster.
+    velocity : int
+        The velocity of the note. It is calculated based on the vertical
+        position of the monster.
+    """
+
+    def __init__(
+        self,
+        position: tuple[float, float],
+    ):
+        super().__init__(position, 5)
 
 
 class HummingVenus(Monster):

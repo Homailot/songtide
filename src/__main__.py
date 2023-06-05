@@ -10,7 +10,7 @@ from src.config import Configs
 from src.field import MonsterField
 from src.monsters import Monster
 from src.monsters.euclideanmonster import RattleSnare, ThumpFoot
-from src.monsters.fractalmonster import EtherealEcho, HummingVenus, SonicScale
+from src.monsters.fractalmonster import DarkEcho, EtherealEcho, HummingVenus, SonicScale
 from src.monsters.monsterinfo import MonsterInfo
 from src.soundengine import soundengine
 from src.ui import UI
@@ -74,6 +74,10 @@ class Game:
             "resources/sprites/EtherealEcho.png"
         ).convert_alpha()
 
+        dark_echo_image = pygame.image.load(
+            "resources/sprites/DarkEcho.png"
+        ).convert_alpha()
+
         humming_venus_image = pygame.image.load(
             "resources/sprites/HummingVenus.png"
         ).convert_alpha()
@@ -97,6 +101,15 @@ class Game:
             "reflecting the colors of the harmonies it creates",
             "#ethereal_button",
             ethereal_echo_image,
+        )
+        self.monster_info[DarkEcho] = MonsterInfo(
+            "Dark Echo",
+            "The Dark Echo is a haunting and mysterious creature that dwells within the shadows, "
+            "emanating bone-chilling and ethereal sounds that send shivers down the spine.<br>"
+            "Veiled in an aura of darkness, this enigmatic monster appears as a spectral entity, "
+            "its form shifting and swirling like a nebulous mist.",
+            "#dark_button",
+            dark_echo_image,
         )
         self.monster_info[HummingVenus] = MonsterInfo(
             "Bowtied Starlet",

@@ -108,7 +108,6 @@ class Monster(ABC):
             self.next_sound = self.generate_next_sound_internal(
                 next_beat, note, duration, rest
             )
-            print(f"monster {self} will play {self.next_sound} at {next_beat}")
 
     @abstractmethod
     def generate_next_sound_internal(

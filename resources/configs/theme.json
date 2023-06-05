@@ -150,6 +150,13 @@
             }
         }
     },
+    "#dark_button": {
+        "images": {
+            "normal_image": {
+                "path": "resources/sprites/DarkEcho.png"
+            }
+        }
+    },
     "#humming_button": {
         "images": {
             "normal_image": {
