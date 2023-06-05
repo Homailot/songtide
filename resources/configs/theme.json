@@ -164,6 +164,13 @@
             }
         }
     },
+    "#rattle_button": {
+        "images": {
+            "normal_image": {
+                "path": "resources/sprites/RattleSnare.png"
+            }
+        }
+    },
     "#overlay": {
         "colours": {
             "dark_bg": "#00000025"

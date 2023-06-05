@@ -11,7 +11,7 @@ from src.config import Configs
 from src.field import MonsterField
 from src.generative.fractal import one_over_f
 from src.monsters import Monster
-from src.monsters.euclideanmonster import ThumpFoot
+from src.monsters.euclideanmonster import RattleSnare, ThumpFoot
 from src.monsters.fractalmonster import EtherealEcho, HummingVenus
 from src.monsters.monsterinfo import MonsterInfo
 from src.monsters.monsterrepository import MonsterRepository
@@ -85,6 +85,10 @@ class Game:
             "resources/sprites/ThumpFoot.png"
         ).convert_alpha()
 
+        rattle_snare_image = pygame.image.load(
+            "resources/sprites/RattleSnare.png"
+        ).convert_alpha()
+
         self.monster_info[EtherealEcho] = MonsterInfo(
             "Ethereal Echo",
             "Mesmerizing creature that embodies the essence of music.<br>"
@@ -109,6 +113,15 @@ class Game:
             "reverberating thumps that echo through the surrounding terrain.",
             "#thump_button",
             thump_foot_image,
+        )
+        self.monster_info[RattleSnare] = MonsterInfo(
+            "Rattle Snare",
+            "The defining feature of the Rattle Snare is its tail, "
+            "which is adorned with a series of small rattling appendages "
+            "that create percussive beats. Each movement of the tail sends "
+            "forth a cascade of intricate and precise rattling sounds, forming a complex rhythmic tapestry.",
+            "#rattle_button",
+            rattle_snare_image,
         )
 
         self.manager = pygame_gui.UIManager(
