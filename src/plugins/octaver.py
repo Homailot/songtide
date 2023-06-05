@@ -1,6 +1,6 @@
 from src.plugins import MonsterPlugin
 from src.utils import octaver
-from src.utils.scales import Intervals, compute_scale
+from src.utils.scales import compute_scale, intervals as Intervals
 
 
 class OctavePlugin(MonsterPlugin):
@@ -17,12 +17,7 @@ class OctavePlugin(MonsterPlugin):
         self.num_octaves = num_octaves
 
     def set_intervals(self, intervals: int):
-        match intervals:
-            case 0:
-                self.scale = compute_scale(0, Intervals.MAJOR)
-            case 1:
-                self.scale = compute_scale(0, Intervals.MINOR)
-
+        self.scale = compute_scale(0, Intervals[intervals])
         self.interval_num = intervals
 
     def get_num_octaves(self) -> int:

@@ -67,7 +67,7 @@ class EtherealEcho(Monster):
                 "Vehemence",
                 self.octave_plugin.get_intervals,
                 0,
-                1,
+                6,
                 self.octave_plugin.set_intervals,
                 1,
             ),
