@@ -1,5 +1,3 @@
-from enum import Enum
-
 intervals = [
     [2, 2, 1, 2, 2, 2],  # major
     [2, 2, 2, 2, 2],  # whole tone

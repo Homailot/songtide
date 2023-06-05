@@ -42,6 +42,7 @@ def start(
     fs.program_select(1, sfid, 0, 45)
     fs.program_select(2, sfid, 128, 13)
     fs.program_select(3, sfid, 128, 6)
+    fs.program_select(4, sfid, 0, 21)
 
     monsters: dict[int, Monster] = {}
     sounds: list[tuple[int, Sound]] = []
@@ -66,12 +67,6 @@ def start(
             print(f"Old BPM: {old_bpm}")
             command.execute(clock)
             print(f"New BPM: {clock.bpm}")
-
-            for sound in sounds:
-                sound[1].update_bpm(old_bpm, clock.bpm)
-
-            for monster in monsters.values():
-                monster.update_bpm(old_bpm, clock.bpm)
 
         current_beat = clock.tick()
 

@@ -6,15 +6,12 @@ from typing import Type
 import pygame
 import pygame_gui
 
-from src.commands import CreateMonsterCommand
 from src.config import Configs
 from src.field import MonsterField
-from src.generative.fractal import one_over_f
 from src.monsters import Monster
 from src.monsters.euclideanmonster import RattleSnare, ThumpFoot
-from src.monsters.fractalmonster import EtherealEcho, HummingVenus
+from src.monsters.fractalmonster import EtherealEcho, HummingVenus, SonicScale
 from src.monsters.monsterinfo import MonsterInfo
-from src.monsters.monsterrepository import MonsterRepository
 from src.soundengine import soundengine
 from src.ui import UI
 
@@ -89,6 +86,10 @@ class Game:
             "resources/sprites/RattleSnare.png"
         ).convert_alpha()
 
+        sonic_scale_image = pygame.image.load(
+            "resources/sprites/SonicScale.png"
+        ).convert_alpha()
+
         self.monster_info[EtherealEcho] = MonsterInfo(
             "Ethereal Echo",
             "Mesmerizing creature that embodies the essence of music.<br>"
@@ -106,6 +107,15 @@ class Game:
             "#humming_button",
             humming_venus_image,
         )
+        self.monster_info[SonicScale] = MonsterInfo(
+            "Sonic Scale",
+            "The Sonic Scale is a captivating and enigmatic creature that defies expectations.<br>"
+            "At first glance, it resembles a beautifully crafted guitar, with sleek curves and strings that shimmer "
+            "like polished silver. However, upon closer inspection, it becomes clear that this instrument-like creature is, "
+            "in fact, a bass of extraordinary proportions.",
+            "#sonic_button",
+            sonic_scale_image,
+        )
         self.monster_info[ThumpFoot] = MonsterInfo(
             "Thump Foot",
             "A mighty and thunderous creature, known for its powerful and earth-shaking stomps.<br>"
@@ -118,7 +128,7 @@ class Game:
             "Rattle Snare",
             "The defining feature of the Rattle Snare is its tail, "
             "which is adorned with a series of small rattling appendages "
-            "that create percussive beats. Each movement of the tail sends "
+            "that create percussive beats.<br>Each movement of the tail sends "
             "forth a cascade of intricate and precise rattling sounds, forming a complex rhythmic tapestry.",
             "#rattle_button",
             rattle_snare_image,
@@ -152,12 +162,6 @@ class Game:
             monster_command_queue,
             self.monster_info,
         )
-
-        # prev = 0
-        # prev_log = 0.4
-        # for i in range(0, 1000):
-        #     prev, prev_log = one_over_f(prev, 0.85, prev_log)
-        #     print(i, ",", prev)
 
         running = True
         while running:

@@ -73,8 +73,7 @@ def euclidean_rhythm_simple(steps: int, hits: int, rotation: int = 0) -> list[in
         The length of the list is equal to the number of steps.
     """
 
-    if hits > steps:
-        hits = steps
+    hits = min(steps, hits)
 
     pattern = []
     counts = []

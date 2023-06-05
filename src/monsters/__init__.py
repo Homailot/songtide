@@ -108,6 +108,7 @@ class Monster(ABC):
             self.next_sound = self.generate_next_sound_internal(
                 next_beat, note, duration, rest
             )
+            print(f"monster {self} will play {self.next_sound} at {next_beat}")
 
     @abstractmethod
     def generate_next_sound_internal(
@@ -155,8 +156,3 @@ class Monster(ABC):
 
     def unmute(self):
         self.muted = False
-
-    def update_bpm(self, old_bpm: float, new_bpm: float):
-        self.last_beat = self.last_beat * old_bpm / new_bpm
-        if self.next_sound is not None:
-            self.next_sound.update_bpm(old_bpm, new_bpm)

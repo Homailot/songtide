@@ -41,6 +41,3 @@ class Sound:
             fs.noteoff(self.channel, self.note)
             return True
         return False
-
-    def update_bpm(self, old_bpm: float, new_bpm: float):
-        self.init = self.init * old_bpm / new_bpm

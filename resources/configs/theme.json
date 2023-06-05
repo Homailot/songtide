@@ -171,6 +171,13 @@
             }
         }
     },
+    "#sonic_button": {
+        "images": {
+            "normal_image": {
+                "path": "resources/sprites/SonicScale.png"
+            }
+        }
+    },
     "#overlay": {
         "colours": {
             "dark_bg": "#00000025"

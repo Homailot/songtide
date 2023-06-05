@@ -12,8 +12,6 @@ class Clock:
         self.current_beat += delta_time / self.seconds_per_beat
 
     def change_bpm(self, bpm: float):
-        self.current_beat = self.current_beat * self.bpm / bpm
-
         self.bpm = bpm
         self.seconds_per_beat = 60 / self.bpm
 

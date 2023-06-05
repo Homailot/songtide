@@ -96,7 +96,7 @@ class BottomBar(DraggableMonsterObserver):
             self.buttons.append(button)
             left += 65
 
-        self.draggableMonster = None
+        self.draggable_monster = None
 
     def process_events(self, event: pygame.event.Event):
         if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
@@ -111,8 +111,8 @@ class BottomBar(DraggableMonsterObserver):
                     )
                     break
 
-        if self.draggableMonster:
-            self.draggableMonster.process_events(event)
+        if self.draggable_monster:
+            self.draggable_monster.process_events(event)
 
     def process_monster_click(
         self, monster_type: Type[Monster], monster_info: MonsterInfo
@@ -125,27 +125,27 @@ class BottomBar(DraggableMonsterObserver):
         )
         monster.start_dragging()
         monster.register_observer(self)
-        self.draggableMonster = monster
+        self.draggable_monster = monster
 
     def update(self, dt: float):
-        if self.draggableMonster:
-            self.draggableMonster.update(dt)
+        if self.draggable_monster:
+            self.draggable_monster.update(dt)
 
     def render(self, surface: pygame.Surface):
-        if self.draggableMonster:
-            self.draggableMonster.render(surface)
+        if self.draggable_monster:
+            self.draggable_monster.render(surface)
 
-    def on_dragging_started(self, monster: DraggableMonster):
+    def on_dragging_started(self, draggable_monster: DraggableMonster):
         pass
 
-    def on_dragging_stopped(self, monster: DraggableMonster):
-        if self.bottom_bar.get_abs_rect().collidepoint(monster.position):
-            self.draggableMonster = None
+    def on_dragging_stopped(self, draggable_monster: DraggableMonster):
+        if self.bottom_bar.get_abs_rect().collidepoint(draggable_monster.position):
+            self.draggable_monster = None
             return
 
-        monster.unregister_observer(self)
-        self.monster_field.add_monster(monster)
-        self.draggableMonster = None
+        draggable_monster.unregister_observer(self)
+        self.monster_field.add_monster(draggable_monster)
+        self.draggable_monster = None
         pass
 
     def process_bpm(self):
