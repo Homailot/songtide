@@ -65,7 +65,7 @@ def start(
             print(f"New BPM: {clock.bpm}")
 
             for sound in sounds:
-                sound.update_bpm(old_bpm, clock.bpm)
+                sound[1].update_bpm(old_bpm, clock.bpm)
 
             for monster in monsters.values():
                 monster.update_bpm(old_bpm, clock.bpm)

@@ -157,6 +157,5 @@ class Monster(ABC):
 
     def update_bpm(self, old_bpm: float, new_bpm: float):
         self.last_beat = self.last_beat * old_bpm / new_bpm
-        self.last_duration = self.last_duration * old_bpm / new_bpm
         if self.next_sound is not None:
             self.next_sound.update_bpm(old_bpm, new_bpm)

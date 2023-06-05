@@ -72,11 +72,19 @@ class EtherealEcho(Monster):
                 1,
             ),
             PluginParameter(
-                "Range",
-                self.octave_plugin.get_num_octaves,
+                "Wavelength",
+                self.fractal_note_plugin.get_base,
+                2,
+                11,
+                self.fractal_note_plugin.set_base,
                 1,
-                3,
-                self.octave_plugin.set_num_octaves,
+            ),
+            PluginParameter(
+                "Skittishness",
+                self.fractal_note_plugin.get_multiplier,
+                2,
+                33,
+                self.fractal_note_plugin.set_multiplier,
                 1,
             ),
         ]

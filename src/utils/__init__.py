@@ -18,9 +18,7 @@ def octaver(scale: list[int], num_octaves: int, index: int) -> int:
         The octaved note.
     """
     octave = index // len(scale)
-    if octave >= num_octaves:
-        octave = num_octaves - 1
-        index = len(scale) - 1
+    octave = octave % num_octaves
     index = index % len(scale)
 
     return scale[index] + 12 * octave
