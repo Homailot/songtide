@@ -139,7 +139,6 @@ class Monster(ABC):
             if self.next_sound is None:
                 self.generate_next_sound(current_beat)
 
-            print(f"Monster {self} made sound {self.next_sound}")
             sound = self.next_sound
             self.next_sound = None
             return sound

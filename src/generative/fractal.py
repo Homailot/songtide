@@ -1,3 +1,6 @@
+from math import sqrt
+
+
 def number_to_base(num: int, base: int) -> list[int]:
     """Converts a number to a list of digits in a given base.
 
@@ -66,3 +69,43 @@ def morse_thue_value(counter: int, base: int, multiplier: int) -> int:
     """
     counter = counter * multiplier
     return sum_digits_base(counter, base)
+
+
+def logistic_map(x: float, k: float) -> float:
+    """Calculates the logistic map for a given x and k.
+
+    Parameters
+    ----------
+    x : float
+        The x value.
+
+    k : float
+        The k value.
+
+    Returns
+    -------
+    float
+        The logistic map value.
+    """
+    return k * x * (1 - x)
+
+
+def one_over_f(x: float, n: float, prev_logistic: float) -> tuple[float, float]:
+    """Calculates the one over f value for a given x and n.
+
+    Parameters
+    ----------
+    x : float
+        The x value.
+    n : float
+        The n value.
+    prev_logistic : float
+        The previous logistic map value.
+
+    Returns
+    -------
+    tuple[float, float]
+        The one over f value, and the logistic map value.
+    """
+    r = logistic_map(prev_logistic, 4)
+    return ((x * n) + (sqrt(1 - n**2) * r), r)

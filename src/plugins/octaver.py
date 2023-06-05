@@ -47,3 +47,51 @@ class OctavePlugin(MonsterPlugin):
             The transformed note, duration, and rest.
         """
         return (octaver(self.scale, self.num_octaves, note), duration, rest)
+
+
+class MultiplicativeOctavePlugin(OctavePlugin):
+    """A Plugin for a monster
+    These plugins alter the notes, durations, and rests of a sound that a monster makes.
+    """
+
+    def __init__(
+        self,
+        intervals: int,
+        num_octaves: int = 2,
+        min_value: int = 0,
+        max_value: int = 2,
+    ):
+        super().__init__(intervals, num_octaves)
+        self.min_value = min_value
+        self.max_value = max_value
+
+    def transform(
+        self, note: int, duration: float, rest: float
+    ) -> tuple[int, float, float]:
+        """Transforms the note, duration, and rest of a sound that a monster makes.
+
+        Parameters
+        ----------
+        note : int
+            The note of the sound.
+        duration : float
+            The duration of the sound.
+        rest : float
+            The rest of the sound.
+
+        Returns
+        -------
+        tuple[int, float, float]
+            The transformed note, duration, and rest.
+        """
+        # Convert to a value between 0 and 1
+        if note < self.min_value:
+            self.min_value = note
+        if note > self.max_value:
+            self.max_value = note
+
+        note = (note - self.min_value) / (self.max_value - self.min_value)
+        note = min(max(note, 0), 1)
+        note = int(note * len(self.scale) * self.num_octaves)
+
+        return (octaver(self.scale, self.num_octaves, note), duration, rest)

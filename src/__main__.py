@@ -9,8 +9,9 @@ import pygame_gui
 from src.commands import CreateMonsterCommand
 from src.config import Configs
 from src.field import MonsterField
+from src.generative.fractal import one_over_f
 from src.monsters import Monster
-from src.monsters.fractalmonster import EtherealEcho
+from src.monsters.fractalmonster import EtherealEcho, HummingVenus
 from src.monsters.monsterinfo import MonsterInfo
 from src.monsters.monsterrepository import MonsterRepository
 from src.soundengine import soundengine
@@ -83,6 +84,14 @@ class Game:
             "#ethereal_button",
             ethereal_echo_image,
         )
+        self.monster_info[HummingVenus] = MonsterInfo(
+            "Humming Venus",
+            "A creature that embodies the essence of music.<br>"
+            "Its translucent body shimmers with delicate hues, "
+            "reflecting the colors of the harmonies it creates",
+            "#ethereal_button",
+            ethereal_echo_image,
+        )
 
         self.manager = pygame_gui.UIManager(
             (configs.screen_width, configs.screen_height)
@@ -113,10 +122,11 @@ class Game:
             self.monster_info,
         )
 
-        # monster = EtherealEcho((0.4, 0.5))
-        # id = self.monster_repository.add_monster(monster)
-        # create_monster_command = CreateMonsterCommand(id, type(monster), (0.4, 0.5))
-        # monster_command_queue.put(create_monster_command)
+        # prev = 0
+        # prev_log = 0.4
+        # for i in range(0, 1000):
+        #     prev, prev_log = one_over_f(prev, 0.85, prev_log)
+        #     print(i, ",", prev)
 
         running = True
         while running:

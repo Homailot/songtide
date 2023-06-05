@@ -87,7 +87,7 @@ class BottomBar(DraggableMonsterObserver):
             )
             button.set_tooltip(
                 text=f"<font face=monogram color=normal_text pixel_size=24>"
-                f"{info.name}</font>"
+                f"{info.name}</font><br>"
                 f"<font face=monogram color=normal_text pixel_size=20>{info.description}"
                 "</font>",
                 delay=0.0,

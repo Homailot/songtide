@@ -134,3 +134,56 @@ class FractalDurationPlugin(MonsterPlugin):
         duration = self.starting_duration / (2**duration)
         self.counter += 1
         return (note, duration, rest)
+
+
+class OneOverFPlugin(MonsterPlugin):
+    """A Plugin for a monster
+    These plugins alter the notes, durations, and rests of a sound that a monster makes.
+
+    Attributes
+    ----------
+    n : int
+        The n value of the one over f sequence.
+    prev : int
+        The previous value of the one over f sequence.
+    prev_log : float
+        The previous logistic map value of the one over f sequence.
+    """
+
+    def __init__(self, n: int):
+        self.n = n
+        self.prev = 0
+        self.prev_log = 0.4
+
+    def set_n(self, n: int):
+        self.n = n
+
+    def get_n(self) -> int:
+        return self.n
+
+    def transform(
+        self, _: int, duration: float, rest: float
+    ) -> tuple[int, float, float]:
+        """Transforms the note, duration, and rest of a sound that a monster makes.
+
+        Parameters
+        ----------
+        note : int
+            The note of the sound.
+        duration : float
+            The duration of the sound.
+        rest : float
+            The rest of the sound.
+
+        Returns
+        -------
+        tuple[int, float, float]
+            The transformed note, duration, and rest.
+        """
+        self.prev, self.prev_log = fractal.one_over_f(self.prev, self.n, self.prev_log)
+
+        return (
+            self.prev,
+            duration,
+            rest,
+        )
