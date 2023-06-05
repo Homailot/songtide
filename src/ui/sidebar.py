@@ -40,12 +40,25 @@ class Parameter:
         self.slider = pygame_gui.elements.UIHorizontalSlider(
             relative_rect=pygame.Rect(15, top + 40, 210, 40),
             start_value=value,
-            value_range=(min, max),
+            value_range=(float(min), float(max)),
             manager=manager,
             container=container,
             anchors={"left": "left", "top": "top"},
             click_increment=step,
         )
+
+    def kill(self):
+        self.label.kill()
+        self.slider.kill()
+
+    def process_events(self, event: pygame.event.Event):
+        if event.type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED:
+            if event.ui_element == self.slider:
+                print(self.name, event.value)
+                # enforce step
+                self.value = round(event.value / self.step) * self.step
+                self.slider.set_current_value(self.value)
+                print(self.name, self.value, " step")
 
 
 class SideBar:
@@ -189,6 +202,9 @@ class SideBar:
                 if not self.sidebar.get_abs_rect().collidepoint(event.pos):
                     self.hide()
 
+        for parameter in self.parameters:
+            parameter.process_events(event)
+
     def show_mute(self):
         self.mute_label.set_text("Mute")
         self.unmute_button.hide()
@@ -212,8 +228,7 @@ class SideBar:
         self.side_header_label.set_text(monster_info.name)
 
         for parameter in self.parameters:
-            parameter.label.kill()
-            parameter.slider.kill()
+            parameter.kill()
 
         self.parameters = []
 
