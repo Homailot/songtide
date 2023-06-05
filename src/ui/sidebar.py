@@ -5,7 +5,12 @@ import pygame
 import pygame_gui
 from pygame_gui.core import IContainerLikeInterface
 
-from src.commands import DeleteMonsterCommand, MonsterCommand, UpdateMonsterMutedCommand
+from src.commands import (
+    DeleteMonsterCommand,
+    MonsterCommand,
+    UpdateMonsterMutedCommand,
+    UpdateMonsterPluginParameterCommand,
+)
 from src.config import Configs
 from src.field import MonsterField
 from src.monsters import Monster
@@ -15,6 +20,7 @@ from src.monsters.monsterinfo import MonsterInfo
 class Parameter:
     def __init__(
         self,
+        id: int,
         name: str,
         value: float,
         min: float,
@@ -23,12 +29,15 @@ class Parameter:
         container: IContainerLikeInterface,
         top: int,
         manager: pygame_gui.UIManager,
+        side_bar: "SideBar",
     ):
+        self.id = id
         self.name = name
         self.value = value
         self.min = min
         self.max = max
         self.step = step
+        self.side_bar = side_bar
 
         self.label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect(15, top, 250, 40),
@@ -56,8 +65,12 @@ class Parameter:
         if event.type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED:
             if event.ui_element == self.slider:
                 # enforce step
+                old_value = self.value
                 self.value = round(event.value / self.step) * self.step
                 self.slider.set_current_value(self.value)
+
+                if old_value != self.value:
+                    self.side_bar.update_parameter(self)
 
 
 class SideBar:
@@ -212,6 +225,16 @@ class SideBar:
         for parameter in self.parameters:
             parameter.process_events(event)
 
+    def update_parameter(self, parameter: Parameter):
+        self.monster_command_queue.put(
+            UpdateMonsterPluginParameterCommand(
+                self.current_monster_id,
+                parameter.id,
+                parameter.value,
+            )
+        )
+        self.current_monster.plugin_parameters[parameter.id].save(parameter.value)
+
     def show_mute(self):
         self.mute_label.set_text("Mute")
         self.unmute_button.hide()
@@ -239,9 +262,10 @@ class SideBar:
 
         self.parameters = []
 
-        for parameter in monster.plugin_parameters:
+        for idx, parameter in enumerate(monster.plugin_parameters):
             self.parameters.append(
                 Parameter(
+                    idx,
                     parameter.name,
                     parameter.value(),
                     parameter.min,
@@ -250,6 +274,7 @@ class SideBar:
                     self.parameter_container,
                     len(self.parameters) * 80,
                     self.ui_manager,
+                    self,
                 )
             )
         self.parameter_container.set_scrollable_area_dimensions(
