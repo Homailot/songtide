@@ -11,6 +11,7 @@ from src.config import Configs
 from src.field import MonsterField
 from src.generative.fractal import one_over_f
 from src.monsters import Monster
+from src.monsters.euclideanmonster import ThumpFoot
 from src.monsters.fractalmonster import EtherealEcho, HummingVenus
 from src.monsters.monsterinfo import MonsterInfo
 from src.monsters.monsterrepository import MonsterRepository
@@ -76,6 +77,14 @@ class Game:
             "resources/sprites/EtherealEcho.png"
         ).convert_alpha()
 
+        humming_venus_image = pygame.image.load(
+            "resources/sprites/HummingVenus.png"
+        ).convert_alpha()
+
+        thump_foot_image = pygame.image.load(
+            "resources/sprites/ThumpFoot.png"
+        ).convert_alpha()
+
         self.monster_info[EtherealEcho] = MonsterInfo(
             "Ethereal Echo",
             "Mesmerizing creature that embodies the essence of music.<br>"
@@ -85,12 +94,21 @@ class Game:
             ethereal_echo_image,
         )
         self.monster_info[HummingVenus] = MonsterInfo(
-            "Humming Venus",
-            "A creature that embodies the essence of music.<br>"
-            "Its translucent body shimmers with delicate hues, "
-            "reflecting the colors of the harmonies it creates",
-            "#ethereal_button",
-            ethereal_echo_image,
+            "Bowtied Starlet",
+            "Its metallic surface gleams with a gentle shimmer, "
+            "reflecting the light like a twinkling star.<br>"
+            "This adorable extraterrestrial being hovers playfully through the air, "
+            "emitting a soft hum that resonates with innocence and charm.",
+            "#humming_button",
+            humming_venus_image,
+        )
+        self.monster_info[ThumpFoot] = MonsterInfo(
+            "Thump Foot",
+            "A mighty and thunderous creature, known for its powerful and earth-shaking stomps.<br>"
+            "Its presence is announced by deep, "
+            "reverberating thumps that echo through the surrounding terrain.",
+            "#thump_button",
+            thump_foot_image,
         )
 
         self.manager = pygame_gui.UIManager(

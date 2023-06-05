@@ -47,6 +47,7 @@ class Monster(ABC):
     plugin_parameters: list[PluginParameter] = []
     last_beat: float = 0.0
     last_duration: float = 0.0
+    last_rest: float = 0.0
 
     @abstractmethod
     def __init__(self, position: tuple[float, float], channel: int = 0):
@@ -99,9 +100,10 @@ class Monster(ABC):
             for plugin in self.plugins:
                 note, duration, rest = plugin.transform(note, duration, rest)
 
-            next_beat = self.last_beat + self.last_duration + rest
+            next_beat = self.last_beat + self.last_duration + self.last_rest
             self.last_beat = next_beat
             self.last_duration = duration
+            self.last_rest = rest
 
             self.next_sound = self.generate_next_sound_internal(
                 next_beat, note, duration, rest

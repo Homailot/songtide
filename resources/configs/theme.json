@@ -150,6 +150,20 @@
             }
         }
     },
+    "#humming_button": {
+        "images": {
+            "normal_image": {
+                "path": "resources/sprites/HummingVenus.png"
+            }
+        }
+    },
+    "#thump_button": {
+        "images": {
+            "normal_image": {
+                "path": "resources/sprites/ThumpFoot.png"
+            }
+        }
+    },
     "#overlay": {
         "colours": {
             "dark_bg": "#00000025"

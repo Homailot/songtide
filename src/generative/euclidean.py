@@ -74,7 +74,7 @@ def euclidean_rhythm_simple(steps: int, hits: int, rotation: int = 0) -> list[in
     """
 
     if hits > steps:
-        raise ValueError("hits must be less than or equal to steps")
+        hits = steps
 
     pattern = []
     counts = []

@@ -63,3 +63,37 @@ class ConstantRestPlugin(MonsterPlugin):
             The transformed note, duration, and rest.
         """
         return (note, duration, self.rest)
+
+
+class ConstantDurationPlugin(MonsterPlugin):
+    """A Plugin for a monster
+    These plugins alter the notes, durations, and rests of a sound that a monster makes.
+    """
+
+    def __init__(self, duration: float):
+        self.duration = duration
+
+    def set_duration(self, duration: float):
+        self.duration = duration
+
+    def get_duration(self) -> float:
+        return self.duration
+
+    def transform(self, note: int, _: float, rest: float) -> tuple[int, float, float]:
+        """Transforms the note, duration, and rest of a sound that a monster makes.
+
+        Parameters
+        ----------
+        note : int
+            The note of the sound.
+        duration : float
+            The duration of the sound.
+        rest : float
+            The rest of the sound.
+
+        Returns
+        -------
+        tuple[int, float, float]
+            The transformed note, duration, and rest.
+        """
+        return (note, self.duration, rest)
