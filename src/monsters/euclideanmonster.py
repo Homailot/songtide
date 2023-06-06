@@ -46,7 +46,7 @@ class ThumpFoot(Monster):
             PluginParameter(
                 "Recall",
                 self.euclidean_rhythm_plugin.get_steps,
-                0,
+                1,
                 16,
                 self.euclidean_rhythm_plugin.set_steps,
                 1,
@@ -54,7 +54,7 @@ class ThumpFoot(Monster):
             PluginParameter(
                 "Footiness",
                 self.euclidean_rhythm_plugin.get_hits,
-                0,
+                1,
                 16,
                 self.euclidean_rhythm_plugin.set_hits,
                 1,

@@ -75,6 +75,9 @@ def euclidean_rhythm_simple(steps: int, hits: int, rotation: int = 0) -> list[in
 
     hits = min(steps, hits)
 
+    if hits == 0 or steps == 0:
+        return [0]
+
     pattern = []
     counts = []
     remainders = []

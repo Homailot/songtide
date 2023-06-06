@@ -155,6 +155,7 @@ class HummingVenus(Monster):
         self.fractal_duration_plugin = FractalDurationPlugin(3, 33)
         self.constant_rest_plugin = ConstantRestPlugin(0)
         self.octave_plugin = MultiplicativeOctavePlugin(0, 2)
+        self.match_downbeat = True
 
         self.plugins = [
             self.one_over_f_plugin,

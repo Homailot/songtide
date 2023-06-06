@@ -33,8 +33,14 @@ class Sound:
         self.init = init
         self.duration = duration
 
-    def play(self, fs: fluidsynth.Synth):
-        fs.noteon(self.channel, self.note, self.velocity)
+    def play(
+        self, fs: fluidsynth.Synth, current_bar: float, pulse_weights: list[float]
+    ):
+        num_pulses = len(pulse_weights)
+        velocity = int(
+            self.velocity * pulse_weights[int(current_bar * num_pulses) % num_pulses]
+        )
+        fs.noteon(self.channel, self.note, velocity)
 
     def update(self, fs: fluidsynth.Synth, current_beat: float):
         if current_beat >= self.init + self.duration:

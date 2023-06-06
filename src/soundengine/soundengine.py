@@ -14,7 +14,6 @@ def start(
     monster_command_queue: "Queue[MonsterCommand]",
     clock_command_queue: "Queue[ClockCommand]",
     monster_sound_queue: "Queue[MonsterSoundEvent]",
-    bpm: float,
 ):
     configs = Configs()
 
@@ -50,7 +49,7 @@ def start(
 
     # monsters.append(EtherealEcho((0.5, 0.5)))
 
-    clock = Clock(bpm)
+    clock = Clock(80, 4, 4)
     while True:
         current_beat = clock.tick()
 
@@ -73,7 +72,7 @@ def start(
 
         # TODO: MOVE THIS TO A SEPARATE THREAD, maybe?
         for monster in monsters.values():
-            monster.generate_next_sound(current_beat)
+            monster.generate_next_sound(clock)
 
             # Generate next sound can take some time, so we get the current beat again so it is accurate
             current_beat = clock.tick()
@@ -91,7 +90,7 @@ def start(
         for monster_id, monster in monsters.items():
             sound = monster.make_sound(current_beat)
             if sound is not None:
-                sound.play(fs)
+                sound.play(fs, clock.current_bar, clock.pulse_weights)
                 sounds.append((monster_id, sound))
                 monster_sound_queue.put(MonsterSoundEvent(monster_id, True))
 

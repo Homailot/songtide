@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Callable
 
+from src.clock import Clock
 from src.plugins import MonsterPlugin
 from src.soundengine.sound import Sound
 
@@ -48,12 +49,14 @@ class Monster(ABC):
     last_beat: float = 0.0
     last_duration: float = 0.0
     last_rest: float = 0.0
+    last_bar: int = 0
 
     @abstractmethod
     def __init__(self, position: tuple[float, float], channel: int = 0):
         self.muted = False
         self.position = position
         self.channel = channel
+        self.match_downbeat = True
 
     @abstractmethod
     def change_position(self, position: tuple[float, float]):
@@ -82,7 +85,7 @@ class Monster(ABC):
         """
         self.plugins.append(plugin)
 
-    def generate_next_sound(self, current_beat: float):
+    def generate_next_sound(self, clock: Clock):
         """Generates the next sound for the monster.
         This is so that monsters can pre-generate their sounds
         and then play them when needed.
@@ -101,13 +104,25 @@ class Monster(ABC):
                 note, duration, rest = plugin.transform(note, duration, rest)
 
             next_beat = self.last_beat + self.last_duration + self.last_rest
-            self.last_beat = next_beat
-            self.last_duration = duration
-            self.last_rest = rest
 
             self.next_sound = self.generate_next_sound_internal(
                 next_beat, note, duration, rest
             )
+
+            next_bar = int(
+                clock.beat_to_bar(
+                    self.next_sound.init + self.next_sound.duration + rest
+                )
+            )
+            # if self.match_downbeat and next_bar > self.last_bar:
+            #     beats_to_bar = clock.remaining_beats_to_bar(next_beat)
+            #     self.next_sound.duration = beats_to_bar
+            #     rest = 0
+
+            self.last_beat = next_beat
+            self.last_bar = next_bar
+            self.last_duration = self.next_sound.duration
+            self.last_rest = rest
 
     @abstractmethod
     def generate_next_sound_internal(

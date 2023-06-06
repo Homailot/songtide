@@ -142,3 +142,22 @@ class UpdateClockBpmCommand(ClockCommand):
 
     def execute(self, clock: Clock):
         clock.change_bpm(self.bpm)
+
+
+class UpdateClockSignatureCommand(ClockCommand):
+    """A command that updates the time signature of a clock.
+
+    Attributes
+    ----------
+    nominator : int
+        The new nominator of the time signature.
+    denominator : int
+        The new denominator of the time signature.
+    """
+
+    def __init__(self, nominator: int, denominator: int):
+        self.nominator = nominator
+        self.denominator = denominator
+
+    def execute(self, clock: Clock):
+        clock.change_signature(self.nominator, self.denominator)
