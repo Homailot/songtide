@@ -8,6 +8,12 @@ import pygame_gui
 
 from src.config import Configs
 from src.field import MonsterField
+from src.generative.indispensability import (
+    basic_indispensability,
+    indispensability,
+    pulse_weights,
+    time_signature_factors,
+)
 from src.monsters import Monster
 from src.monsters.euclideanmonster import RattleSnare, ThumpFoot
 from src.monsters.fractalmonster import DarkEcho, EtherealEcho, HummingVenus, SonicScale
@@ -150,6 +156,18 @@ class Game:
         self.manager = pygame_gui.UIManager(
             (configs.screen_width, configs.screen_height)
         )
+
+        # print(time_signature_factors(1, 4))
+        # print(time_signature_factors(2, 8))
+        # print(time_signature_factors(2, 4))
+        # print(time_signature_factors(4, 8))
+        # print(time_signature_factors(3, 4))
+        # print(time_signature_factors(6, 8))
+        # print(time_signature_factors(4, 4))
+        # print(time_signature_factors(8, 8))
+        # print(-1 % -3)
+
+        print(pulse_weights(3, 4))
 
         stop_event = Event()
         monster_command_queue = Queue()

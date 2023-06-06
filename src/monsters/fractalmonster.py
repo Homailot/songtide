@@ -43,10 +43,10 @@ class EtherealEcho(Monster):
             PluginParameter(
                 "Jiveness",
                 self.fractal_duration_plugin.get_starting_duration,
-                0.5,
+                0.125,
                 3,
                 self.fractal_duration_plugin.set_starting_duration,
-                0.25,
+                0.125,
             ),
             PluginParameter(
                 "Quirkiness",
@@ -62,7 +62,7 @@ class EtherealEcho(Monster):
                 0,
                 2,
                 self.constant_rest_plugin.set_rest,
-                0.25,
+                0.125,
             ),
             PluginParameter(
                 "Vehemence",
@@ -167,10 +167,10 @@ class HummingVenus(Monster):
             PluginParameter(
                 "Jiveness",
                 self.fractal_duration_plugin.get_starting_duration,
-                0.5,
+                0.125,
                 3,
                 self.fractal_duration_plugin.set_starting_duration,
-                0.25,
+                0.125,
             ),
             PluginParameter(
                 "Quirkiness",
@@ -186,7 +186,7 @@ class HummingVenus(Monster):
                 0,
                 2,
                 self.constant_rest_plugin.set_rest,
-                0.25,
+                0.125,
             ),
             PluginParameter(
                 "Vehemence",
@@ -263,10 +263,10 @@ class SonicScale(Monster):
             PluginParameter(
                 "Jiveness",
                 self.fractal_duration_plugin.get_starting_duration,
-                0.5,
+                0.125,
                 3,
                 self.fractal_duration_plugin.set_starting_duration,
-                0.25,
+                0.125,
             ),
             PluginParameter(
                 "Quirkiness",
@@ -282,7 +282,7 @@ class SonicScale(Monster):
                 0,
                 2,
                 self.constant_rest_plugin.set_rest,
-                0.25,
+                0.125,
             ),
             PluginParameter(
                 "Vehemence",

@@ -9,6 +9,7 @@
 
 [Euclidean Rhythm](https://github.com/brianhouse/bjorklund)
 [Fractmus](https://fractmus.com/Math.php)
+[Indispensability](https://www.jstor.org/stable/3680177)
 
 ## PyFluidSynth
 

@@ -38,7 +38,7 @@ class ThumpFoot(Monster):
             PluginParameter(
                 "Jiveness",
                 self.constant_duration_plugin.get_duration,
-                0.0625,
+                0.125,
                 1,
                 self.constant_duration_plugin.set_duration,
                 0.0625,
@@ -46,7 +46,7 @@ class ThumpFoot(Monster):
             PluginParameter(
                 "Recall",
                 self.euclidean_rhythm_plugin.get_steps,
-                1,
+                0,
                 16,
                 self.euclidean_rhythm_plugin.set_steps,
                 1,
@@ -54,7 +54,7 @@ class ThumpFoot(Monster):
             PluginParameter(
                 "Footiness",
                 self.euclidean_rhythm_plugin.get_hits,
-                1,
+                0,
                 16,
                 self.euclidean_rhythm_plugin.set_hits,
                 1,
@@ -62,7 +62,7 @@ class ThumpFoot(Monster):
             PluginParameter(
                 "Stompiness",
                 self.euclidean_rhythm_plugin.get_accents,
-                1,
+                0,
                 16,
                 self.euclidean_rhythm_plugin.set_accents,
                 1,
