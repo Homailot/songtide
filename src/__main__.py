@@ -16,7 +16,7 @@ from src.generative.indispensability import (
 )
 from src.monsters import Monster
 from src.monsters.euclideanmonster import RattleSnare, ThumpFoot
-from src.monsters.fractalmonster import DarkEcho, EtherealEcho, HummingVenus, SonicScale
+from src.monsters.fractalmonster import Boris, DarkEcho, EtherealEcho, HummingVenus, SonicScale
 from src.monsters.monsterinfo import MonsterInfo
 from src.soundengine import soundengine
 from src.ui import UI
@@ -84,6 +84,10 @@ class Game:
             "resources/sprites/DarkEcho.png"
         ).convert_alpha()
 
+        boris_image = pygame.image.load(
+            "resources/sprites/Boris.png"
+        ).convert_alpha()
+
         humming_venus_image = pygame.image.load(
             "resources/sprites/HummingVenus.png"
         ).convert_alpha()
@@ -116,6 +120,12 @@ class Game:
             "its form shifting and swirling like a nebulous mist.",
             "#dark_button",
             dark_echo_image,
+        )
+        self.monster_info[Boris] = MonsterInfo(
+            "Boris",
+            "Boris.",
+            "#boris_button",
+            boris_image,
         )
         self.monster_info[HummingVenus] = MonsterInfo(
             "Bowtied Starlet",

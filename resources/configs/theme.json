@@ -157,6 +157,13 @@
             }
         }
     },
+    "#boris_button": {
+        "images": {
+            "normal_image": {
+                "path": "resources/sprites/Boris.png"
+            }
+        }
+    },
     "#humming_button": {
         "images": {
             "normal_image": {

@@ -43,6 +43,7 @@ def start(
     fs.program_select(3, sfid, 128, 6)
     fs.program_select(4, sfid, 0, 21)
     fs.program_select(5, sfid, 0, 62)
+    fs.program_select(6, sfid, 1, 4)
 
     monsters: dict[int, Monster] = {}
     sounds: list[tuple[int, Sound]] = []
