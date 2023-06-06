@@ -16,7 +16,14 @@ from src.generative.indispensability import (
 )
 from src.monsters import Monster
 from src.monsters.euclideanmonster import RattleSnare, ThumpFoot
-from src.monsters.fractalmonster import Boris, DarkEcho, EtherealEcho, HummingVenus, SonicScale
+from src.monsters.fractalmonster import (
+    Boris,
+    DarkEcho,
+    EtherealEcho,
+    FusionCore,
+    HummingVenus,
+    SonicScale,
+)
 from src.monsters.monsterinfo import MonsterInfo
 from src.soundengine import soundengine
 from src.ui import UI
@@ -84,8 +91,10 @@ class Game:
             "resources/sprites/DarkEcho.png"
         ).convert_alpha()
 
-        boris_image = pygame.image.load(
-            "resources/sprites/Boris.png"
+        boris_image = pygame.image.load("resources/sprites/Boris.png").convert_alpha()
+
+        fusion_image = pygame.image.load(
+            "resources/sprites/FusionCore.png"
         ).convert_alpha()
 
         humming_venus_image = pygame.image.load(
@@ -126,6 +135,15 @@ class Game:
             "Boris.",
             "#boris_button",
             boris_image,
+        )
+        self.monster_info[FusionCore] = MonsterInfo(
+            "Fusion Core",
+            "This extraordinary monster manifests itself as a living embodiment of a fusion reactor, "
+            "radiating with intense and vibrant hues of energy.<br>"
+            "Its body pulsates with a captivating glow, revealing intricate patterns reminiscent of "
+            "swirling plasma and crackling arcs of electricity.",
+            "#fusion_button",
+            fusion_image,
         )
         self.monster_info[HummingVenus] = MonsterInfo(
             "Bowtied Starlet",

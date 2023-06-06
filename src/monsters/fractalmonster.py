@@ -150,6 +150,26 @@ class Boris(EtherealEcho):
         super().__init__(position, 6)
 
 
+class FusionCore(EtherealEcho):
+    """FusionCore
+
+    Attributes
+    ----------
+    starting_value : int
+        The starting value for the sequence. It is a MIDI note,
+        and is calculated based on the horizontal position of the monster.
+    velocity : int
+        The velocity of the note. It is calculated based on the vertical
+        position of the monster.
+    """
+
+    def __init__(
+        self,
+        position: tuple[float, float],
+    ):
+        super().__init__(position, 7)
+
+
 class HummingVenus(Monster):
     """Monster that generates cute, humming notes.
 

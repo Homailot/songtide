@@ -164,6 +164,13 @@
             }
         }
     },
+    "#fusion_button": {
+        "images": {
+            "normal_image": {
+                "path": "resources/sprites/FusionCore.png"
+            }
+        }
+    },
     "#humming_button": {
         "images": {
             "normal_image": {
