@@ -1,5 +1,7 @@
 # Songtide
 
+![Songtide](docs/images/intro.png)
+
 Songtide is an interactive platform designed for exploring and experimenting with various music generation algorithms. It offers a diverse selection of monsters, each with its own unique sound and instrument. By adjusting the parameters and positioning of the monsters on the screen, users can create their own distinct melodies and compositions.
 
 ## Technologies Used
